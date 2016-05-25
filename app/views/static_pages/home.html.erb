@@ -1,7 +1,507 @@
-<% provide(:title, "Home") %>
-<h1>Sample App</h1>
-<p>
-  This is the home page for the
-  <a href="http://www.railstutorial.org/">Ruby on Rails Tutorial</a>
-  sample application.
-</p>
+<div id="leftsidespace" class="leftContainer"></div>
+<div id="leftRightSidespace" class="leftRightContainer"></div>
+<div id="maincont" class="container">
+
+  <div id="title" class="center jumbotron">
+    <h1>HL7 Viewer</h1>
+  </div>
+
+
+  <div class="form-group">
+    <textarea class="form-control" rows="5" id="HL7"></textarea>
+  </div>
+  <script type="text/javascript">
+    var detailLookup = ["MSH", "EVN", "ACC", "ADD", "AIG", "AIL", "AIP", "AIS", "AL1", "APR", "ARQ", "AUT", "BLG", "CDM", "CM0", "CM1", "CM2", "CSP", "CSR", "CSS", "CTD", "CTI", "DB1", "DG1", "DRG", "DSC", "DSP", "EQL", "ERQ", "ERR", "FAC", "FT1", "GOL", "GT1", "IAM", "IN1", "IN2", "IN3", "LCC", "LCH", "LDP", "LOC", "LRL", "MFA", "MFE", "MFI", "MRG", "MSA", "NK1", "NSC", "NST", "NTE", "OBR", "OBX", "ODS", "ODT", "OM1", "OM2", "OM3", "OM4", "OM5", "OM6", "PCR", "PD1", "PDC", "PEO", "PES", "PID", "PR1", "PRA", "PRB", "PV1", "ORC", "PV2", "SCH", "RGS"];
+    var detail = new Array();
+    detail[0] = new Array("Encoding Characters", "Sending Application", "Sending Facility", "Receiving Application", "Receiving Facility", "Date/Time Of Message", "Security", "Message Type", "Message Control ID", "Processing ID", "Version ID", "Sequence Number", "Continuation Pointer", "Accept Acknowledgment Type", "Application Acknowledgment Type", "Country Code", "Character Set", "Principal Language Of Message");
+    detail[1] = new Array("Event Type Code", "Recorded Date/Time", "Date/Time Planned Event", "Event Reason Code", "Operator ID", "Event Occurred");
+    detail[2] = new Array("Accident Date/Time", "Accident Code", "Accident Location", "Auto Accident State", "Accident Job Related Indicator", "Accident Death Indicator");
+    detail[3] = new Array("Addendum Continuation Pointer");
+    detail[4] = new Array("Set ID - AIG", "Segment Action Code", "Resource ID", "Resource Type", "Resource Group", "Resource Quantity", "Resource Quantity Units", "Start Date/Time", "Start Date/Time Offset", "Start Date/Time Offset Units", "Duration", "Duration Units", "Allow Substitution Code", "Filler Status Code");
+    detail[5] = new Array("Set ID - AIL", "Segment Action Code", "Location Resource ID", "Location Type-AIL", "Location Group", "Start Date/Time", "Start Date/Time Offset", "Start Date/Time Offset Units", "Duration", "Duration Units", "Allow Substitution Code", "Filler Status Code");
+    detail[6] = new Array("Set ID - AIP", "Segment Action Code", "Personnel Resource ID", "Resource Role", "Resource Group", "Start Date/Time", "Start Date/Time Offset", "Start Date/Time Offset Units", "Duration", "Duration Units", "Allow Substitution Code", "Filler Status Code");
+    detail[7] = new Array("Set ID - AIS", "Segment Action Code", "Universal Service ID", "Start Date/Time", "Start Date/Time Offset", "Start Date/Time Offset Units", "Duration", "Duration Units", "Allow Substitution Code", "Filler Status Code");
+    detail[8] = new Array("Set ID - AL1", "Allergy Type", "Allergy Code/Mnemonic/Description", "Allergy Severity", "Allergy Reaction", "Identification Date");
+    detail[9] = new Array("Time Selection Criteria", "Resource Selection Criteria", "Location Selection Criteria", "Slot Spacing Criteria", "Filler Override Criteria");
+    detail[10] = new Array("Placer Appointment ID", "Filler Appointment ID", "Occurrence Number", "Placer Group Number", "Schedule ID", "Request Event Reason", "Appointment Reason", "Appointment Type", "Appointment Duration", "Appointment Duration Units", "Requested Start Date/Time Range", "Priority-ARQ", "Repeating Interval", "Repeating Interval Duration", "Placer Contact Person", "Placer Contact Phone Number", "Placer Contact Address", "Placer Contact Location", "Entered by Person", "Entered by Phone Number", "Entered by Location", "Parent Placer Appointment ID", "Parent Filler Appointment ID");
+    detail[11] = new Array("Authorizing Payor, Plan ID", "Authorizing Payor, Company ID", "Authorizing Payor, Company Name", "Authorization Effective Date", "Authorization Expiration Date", "Authorization Identifier", "Reimbursement Limit", "Requested Number of Treatments", "Authorized Number of Treatments", "Process Date");
+    detail[12] = new Array("When to Charge", "Charge Type", "Account ID");
+    detail[13] = new Array("Primary Key Value - CDM", "Charge Code Alias", "Charge Description Short", "Charge Description Long", "Description Override Indicator", "Exploding Charges", "Procedure Code", "Active/Inactive Flag", "Inventory Number", "Resource Load", "Contract Number", "Contract Organization", "Room Fee Indicator");
+    detail[14] = new Array("Set ID - CM0", "Sponsor Study ID", "Alternate Study ID", "Title of Study", "Chairman of Study", "Last IRB Approval Date", "Total Accrual to Date", "Last Accrual Date", "Contact for Study", "Contact's Tel. Number", "Contact's Address");
+    detail[15] = new Array("Set ID - CM1", "Study Phase Identifier", "Description of Study Phase");
+    detail[16] = new Array("Set ID - CM2", "Scheduled Time Point", "Description of Time Point", "Events Scheduled This Time Point");
+    detail[17] = new Array("Study Phase Identifier", "Date/time Study Phase Began", "Date/time Study Phase Ended", "Study Phase Evaluability");
+    detail[18] = new Array("Sponsor Study ID", "Alternate Study ID", "Institution Registering the Patient", "Sponsor Patient ID", "Alternate Patient ID - CSR", "Date/Time Of Patient Study Registration", "Person Performing Study Registration", "Study Authorizing Provider", "Date/time Patient Study Consent Signed", "Patient Study Eligibility Status", "Study Randomization Date/time", "Randomized Study Arm", "Stratum for Study Randomization", "Patient Evaluability Status", "Date/time Ended Study", "Reason Ended Study");
+    detail[19] = new Array("Study Scheduled Time Point", "Study Scheduled Patient Time Point", "Study Quality Control Codes");
+    detail[20] = new Array("Contact Role", "Contact Name", "Contact Address", "Contact Location", "Contact Communication Information", "Preferred Method Of Contact", "Contact Identifiers");
+    detail[21] = new Array("Sponsor Study ID", "Study Phase Identifier", "Study Scheduled Time Point");
+    detail[22] = new Array("Set ID - DB1", "Disabled Person Code", "Disabled Person Identifier", "Disabled Indicator", "Disability Start Date", "Disability End Date", "Disability Return to Work Date", "Disability Unable to Work Date");
+    detail[23] = new Array("Set ID - DG1", "Diagnosis Coding Method", "Diagnosis Code - DG1", "Diagnosis Description", "Diagnosis Date/Time", "Diagnosis Type", "Major Diagnostic Category", "Diagnostic Related Group", "DRG Approval Indicator", "DRG Grouper Review Code", "Outlier Type", "Outlier Days", "Outlier Cost", "Grouper Version And Type", "Diagnosis Priority", "Diagnosing Clinician", "Diagnosis Classification", "Confidential Indicator", "Attestation Date/Time");
+    detail[24] = new Array("Diagnostic Related Group", "DRG Assigned Date/Time", "DRG Approval Indicator", "DRG Grouper Review Code", "Outlier Type", "Outlier Days", "Outlier Cost", "DRG Payor", "Outlier Reimbursement", "Confidential Indicator");
+    detail[25] = new Array("Continuation Pointer");
+    detail[26] = new Array("Set ID - DSP", "Display Level", "Data Line", "Logical Break Point", "Result ID");
+    detail[27] = new Array("Query Tag", "0106	Query/ Response Format Code", "EQL Query Name", "EQL Query Statement");
+    detail[28] = new Array("Query Tag", "Event Identifier", "Input Parameter List");
+    detail[29] = new Array("Error Code and Location");
+    detail[30] = new Array("Facility ID-FAC", "Facility Type", "Facility Address", "Facility Telecommunication", "Contact Person", "Contact Title", "Contact Address", "Contact Telecommunication", "Signature Authority", "Signature Authority Title", "Signature Authority Address", "Signature Authority Telecommunication");
+    detail[31] = new Array("Set ID - FT1", "Transaction ID", "Transaction Batch ID", "Transaction Date", "Transaction Posting Date", "Transaction Type", "Transaction Code", "Transaction Description", "Transaction Description - Alt", "Transaction Quantity", "Transaction Amount - Extended", "Transaction Amount - Unit", "Department Code", "Insurance Plan ID", "Insurance Amount", "Assigned Patient Location", "Fee Schedule", "Patient Type", "Diagnosis Code - FT1", "Performed By Code", "Ordered By Code", "Unit Cost", "Filler Order Number", "Entered By Code", "Procedure Code", "Procedure Code Modifier", "Advanced Beneficiary Notice Code", "Medically Necessary Duplicate Procedure Reason", "NDC Code");
+    detail[32] = new Array("Action Code", "Action Date/Time", "Goal ID", "Goal Instance ID", "Episode of Care ID", "Goal List Priority", "Goal Established Date/Time", "Expected Goal Achieve Date/Time", "Goal Classification", "Goal Management Discipline", "Current Goal Review Status", "Current Goal Review Date/Time", "Next Goal Review Date/Time", "Previous Goal Review Date/Time", "Goal Review Interval", "Goal Evaluation", "Goal Evaluation Comment", "Goal Life Cycle Status", "Goal Life Cycle Status Date/Time", "Goal Target Type", "Goal Target Name");
+    detail[33] = new Array("Set ID - GT1", "Guarantor Number", "Guarantor Name", "Guarantor Spouse Name", "Guarantor Address", "Guarantor Ph Num-Home", "Guarantor Ph Num-Business", "Guarantor Date/Time Of Birth", "Guarantor Sex", "Guarantor Type", "Guarantor Relationship", "Guarantor SSN", "Guarantor Date - Begin", "Guarantor Date - End", "Guarantor Priority", "Guarantor Employer Name", "Guarantor Employer Address", "Guarantor Employer Phone Number", "Guarantor Employee ID Number", "Guarantor Employment Status", "Guarantor Organization Name", "Guarantor Billing Hold Flag", "Guarantor Credit Rating Code", "Guarantor Death Date And Time", "Guarantor Death Flag", "Guarantor Charge Adjustment Code", "Guarantor Household Annual Income", "Guarantor Household Size", "Guarantor Employer ID Number", "Guarantor Marital Status Code", "Guarantor Hire Effective Date", "Employment Stop Date", "Living Dependency", "Ambulatory Status", "Citizenship", "Primary Language", "Living Arrangement", "Publicity Code", "Protection Indicator", "Student Indicator", "Religion", "Mother s Maiden Name", "Nationality", "Ethnic Group", "Contact Person s Name", "Contact Person s Telephone Number", "Contact Reason", "Contact Relationship", "Job Title", "Job Code/Class", "Guarantor Employer s Organization Name", "Handicap", "Job Status", "Guarantor Financial Class", "Guarantor Race");
+    detail[34] = new Array("Set ID - IAM", "Allergen Type Code", "Allergen Code/Mnemonic/Description", "Allergy Severity Code", "Allergy Reaction Code", "Allergy Action Code", "Allergy Unique Identifier", "Action Reason", "Sensitivity to Causative Agent Code", "Allergen Group Code/Mnemonic/Description", "Onset Date", "Onset Date Text", "Reported Date/Time", "Reported By", "Relationship to Patient Code", "Alert Device Code", "Allergy Clinical Status Code", "Statused by Person", "Statused by Organization", "Statused at Date/Time");
+    detail[35] = new Array("Set ID - IN1", "Insurance Plan ID", "Insurance Company ID", "Insurance Company Name", "Insurance Company Address", "Insurance Co Contact Person", "Insurance Co Phone Number", "Group Number", "Group Name", "Insured s Group Emp ID", "Insured s Group Emp Name", "Plan Effective Date", "Plan Expiration Date", "Authorization Information", "Plan Type", "Name Of Insured", "Insured s Relationship To Patient", "Insured s Date Of Birth", "Insured s Address", "Assignment Of Benefits", "Coordination Of Benefits", "Coord Of Ben. Priority", "Notice Of Admission Flag", "Notice Of Admission Date", "Report Of Eligibility Flag", "Report Of Eligibility Date", "Release Information Code", "Pre-Admit Cert", "Verification Date/Time", "Verification By", "Type Of Agreement Code", "Billing Status", "Lifetime Reserve Days", "Delay Before L.R. Day", "Company Plan Code", "Policy Number", "Policy Deductible", "Policy Limit - Amount", "Policy Limit - Days", "Room Rate - Semi-Private", "Room Rate - Private", "Insured s Employment Status", "Insured s Sex", "Insured s Employer s Address", "Verification Status", "Prior Insurance Plan ID", "Coverage Type", "Handicap", "Insured s ID Number");
+    detail[36] = new Array("Insured s Employee ID", "Insured s Social Security Number", "Insured s Employer s Name and ID", "Employer Information Data", "Mail Claim Party", "Medicare Health Ins Card Number", "Medicaid Case Name", "Medicaid Case Number", "Military Sponsor Name", "Military ID Number", "Dependent Of Military Recipient", "Military Organization", "Military Station", "Military Service", "Military Rank/Grade", "Military Status", "Military Retire Date", "Military Non-Avail Cert On File", "Baby Coverage", "Combine Baby Bill", "Blood Deductible", "Special Coverage Approval Name", "Special Coverage Approval Title", "Non-Covered Insurance Code", "Payor ID", "Payor Subscriber ID", "Eligibility Source", "Room Coverage Type/Amount", "Policy Type/Amount", "Daily Deductible", "Living Dependency", "Ambulatory Status", "Citizenship", "Primary Language", "Living Arrangement", "Publicity Code", "Protection Indicator", "Student Indicator", "Religion", "Mother s Maiden Name", "Nationality", "Ethnic Group", "Marital Status", "Insured s Employment Start Date", "Employment Stop Date", "Job Title", "Job Code/Class", "Job Status", "Employer Contact Person Name", "Employer Contact Person Phone Number", "Employer Contact Reason", "Insured s Contact Person s Name", "Insured s Contact Person Phone Number", "Insured s Contact Person Reason", "Relationship To The Patient Start Date", "Relationship To The Patient Stop Date", "Insurance Co. Contact Reason", "Insurance Co Contact Phone Number", "Policy Scope", "Policy Source", "Patient Member Number", "Guarantor s Relationship To Insured", "Insured s Phone Number - Home", "Insured s Employer Phone Number", "Military Handicapped Program", "Suspend Flag", "Copay Limit Flag", "Stoploss Limit Flag", "Insured Organization Name And ID", "Insured Employer Organization Name And ID", "Race", "HCFA Patient s Relationship to Insured");
+    detail[37] = new Array("Set ID - IN3", "Certification Number", "Certified By", "Certification Required", "Penalty", "Certification Date/Time", "Certification Modify Date/Time", "Operator", "Certification Begin Date", "Certification End Date", "Days", "Non-Concur Code/Description", "Non-Concur Effective Date/Time", "Physician Reviewer", "Certification Contact", "Certification Contact Phone Number", "Appeal Reason", "Certification Agency", "Certification Agency Phone Number", "Pre-Certification Req/Window", "Case Manager", "Second Opinion Date", "Second Opinion Status", "Second Opinion Documentation Received", "Second Opinion Physician");
+    detail[38] = new Array("Primary Key Value - LCC", "Location Department", "Accommodation Type", "Charge Code");
+    detail[39] = new Array("Primary Key Value - LCH", "Segment Action Code", "Segment Unique Key", "Location Characteristic ID", "Location Characteristic Value");
+    detail[40] = new Array("Primary Key Value - LDP", "Location Department", "Location Service", "Specialty Type", "Valid Patient Classes", "Active/Inactive Flag", "Activation Date LDP", "Inactivation Date - LDP", "Inactivated Reason", "Visiting Hours", "Contact Phone");
+    detail[41] = new Array("Primary Key Value - LOC", "Location Description", "Location Type - LOC", "Organization Name - LOC", "Location Address", "Location Phone", "License Number", "Location Equipment");
+    detail[42] = new Array("Primary Key Value - LRL", "Segment Action Code", "Segment Unique Key", "Location Relationship ID", "Organizational Location Relationship Value", "Patient Location Relationship Value");
+    detail[43] = new Array("Record-Level Event Code", "MFN Control ID", "Event Completion Date/Time", "MFN Record Level Error Return", "Primary Key Value MFA", "Primary Key Value Type - MFA");
+    detail[44] = new Array("Record-Level Event Code", "MFN Control ID", "Effective Date/Time", "Primary Key Value - MFE", "Primary Key Value Type");
+    detail[45] = new Array("Master File Identifier", "Master File Application Identifier", "File-Level Event Code", "Entered Date/Time", "Effective Date/Time", "Response Level Code");
+    detail[46] = new Array("Prior Patient Identifier List", "Prior Alternate Patient ID", "Prior Patient Account Number", "Prior Patient ID", "Prior Visit Number", "Prior Alternate Visit ID", "Prior Patient Name");
+    detail[47] = new Array("Acknowledgement Code", "Message Control ID", "Text Message", "Expected Sequence Number", "Delayed Acknowledgment Type", "Error Condition");
+    detail[48] = new Array("Set ID - NK1", "NK Name", "Relationship", "Address", "Phone Number", "Business Phone Number", "Contact Role", "Start Date", "End Date", "Next of Kin / Associated Parties Job Title", "Next of Kin / Associated Parties Job Code/Class", "Next of Kin / Associated Parties Employee Number", "Organization Name - NK1", "Marital Status", "Sex", "Date/Time Of Birth", "Living Dependency", "Ambulatory Status", "Citizenship", "Primary Language", "Living Arrangement", "Publicity Code", "Protection Indicator", "Student Indicator", "Religion", "Mother s Maiden Name", "Nationality", "Ethnic Group", "Contact Reason", "Contact Person s Name", "Contact Person s Telephone Number", "Contact Person s Address", "Next of Kin/Associated Party s Identifiers", "Job Status", "Race", "Handicap", "Contact Person Social Security Number");
+    detail[49] = new Array("Network Change Type", "Current CPU", "Current Fileserver", "Current Application", "Current Facility", "New CPU", "New Fileserver", "New Application", "New Facility");
+    detail[50] = new Array("Statistics Available", "Source Identifier", "Source Type", "Statistics Start", "Statistics End", "Receive Character Count", "Send Character Count", "Messages Received", "Messages Sent", "Checksum Errors Received", "Length Errors Received", "Other Errors Received", "Connect Timeouts", "Receive Timeouts", "Network Errors");
+    detail[51] = new Array("Set ID - NTE", "Source of Comment", "Comment", "Comment Type");
+    detail[52] = new Array("Set ID - OBR", "Placer Order Number", "Filler Order Number", "Universal Service ID", "Priority-OBR", "Requested Date/time", "Observation Date/Time", "Observation End Date/Time", "Collection Volume *", "Collector Identifier *", "Specimen Action Code *", "Danger Code", "Relevant Clinical Info.", "Specimen Received Date/Time *", "Specimen Source", "Ordering Provider", "Order Callback Phone Number", "Placer Field 1", "Placer Field 2", "Filler Field 1 +", "Filler Field 2 +", "Results Rpt/Status Chng - Date/Time +", "Charge to Practice +", "Diagnostic Serv Sect ID", "Result Status +", "Parent Result +", "Quantity/Timing", "Result Copies To", "Parent Number", "Transportation Mode", "Reason for Study", "Principal Result Interpreter +", "Assistant Result Interpreter +", "Technician +", "Transcriptionist +", "Scheduled Date/Time +", "Number of Sample Containers *", "Transport Logistics of Collected Sample *", "Collector s Comment *", "Transport Arrangement Responsibility", "Transport Arranged", "Escort Required", "Planned Patient Transport Comment", "Procedure Code", "Procedure Code Modifier");
+    detail[53] = new Array("Set ID - OBX", "Value Type", "Observation Identifier", "Observation Sub-ID", "Observation Value", "Units", "References Range", "Abnormal Flags", "Probability", "Nature of Abnormal Test", "Observation Result Status", "Date Last Obs Normal Values", "User Defined Access Checks", "Date/Time of the Observation", "Producer's ID", "Responsible Observer", "Observation Method");
+    detail[54] = new Array("Type", "Service Period", "Diet, Supplement, or Preference Code", "Text Instruction");
+    detail[55] = new Array("Tray Type", "Service Period", "Text Instruction");
+    detail[56] = new Array("Sequence Number - Test/Observation Master File", "Producer's Test/Observation ID", "Permitted Data Types", "Specimen Required", "Producer ID", "Observation Description", "Other Test/Observation IDs for the Observation", "Other Names", "Preferred Report Name for the Observation", "Preferred Short Name or Mnemonic for Observation", "Preferred Long Name for the Observation", "Orderability", "Identity of Instrument Used to Perform this Study", "Coded Representation of Method", "Portable", "Observation Producing Department/Section", "Telephone Number of Section", "Nature of Test/Observation", "Report Subheader", "Report Display Order", "Date/Time Stamp for any change in Definition for the Observation", "Effective Date/Time of Change", "Typical Turn-Around Time", "Processing Time", "Processing Priority", "Reporting Priority", "Outside Site", "Address of Outside Site", "Phone Number of Outside Site", "Confidentiality Code", "Observations Required to Interpret the Obs", "Interpretation of Observations", "Contraindications to Observations", "Reflex Tests/Observations", "Rules that Trigger Reflex Testing", "Fixed Canned Message", "Patient Preparation", "Procedure Medication", "Factors that may Effect the Observation", "Test/Observation Performance Schedule", "Description of Test Methods", "Kind of Quantity Observed", "Point Versus Interval", "Challenge Information", "Relationship Modifier", "Target Anatomic Site Of Test", "Modality Of Imaging Measurement");
+    detail[57] = new Array("Sequence Number - Test/Observation Master File", "Units of Measure", "Range of Decimal Precision", "Corresponding SI Units of Measure", "SI Conversion Factor", "Reference", "Critical Range for Ordinal & Continuous Obs", "Absolute Range for Ordinal & Continuous Obs", "Delta Check Criteria", "Minimum Meaningful Increments");
+    detail[58] = new Array("Sequence Number - Test/Observation Master File", "Preferred Coding System", "Valid Coded Answers", "Normal Text/Codes for Categorical Observations", "Abnormal Text/Codes for Categorical Observations", "Critical Text Codes for Categorical Observations", "Value Type");
+    detail[59] = new Array("Sequence Number - Test/Observation Master File", "Derived Specimen", "Container Description", "Container Volume", "Container Units", "Specimen", "Additive", "Preparation", "Special Handling Requirements", "Normal Collection Volume", "Minimum Collection Volume", "Specimen Requirements", "Specimen Priorities", "Specimen Retention Time");
+    detail[60] = new Array("Sequence Number - Test/Observation Master File", "Test/Observations Included within an Ordered Test Battery", "Observation ID Suffixes");
+    detail[61] = new Array("Sequence Number - Test/Observation Master File", "Derivation Rule");
+    detail[62] = new Array("Implicated Product", "Generic Product", "Product Class", "Total Duration Of Therapy", "Product Manufacture Date", "Product Expiration Date", "Product Implantation Date", "Product Explantation Date", "Single Use Device", "Indication For Product Use", "Product Problem", "Product Serial/Lot Number", "Product Available For Inspection", "Product Evaluation Performed", "Product Evaluation Status", "Product Evaluation Results", "Evaluated Product Source", "Date Product Returned To Manufacturer", "Device Operator Qualifications", "Relatedness Assessment", "Action Taken In Response To The Event", "Event Causality Observations", "Indirect Exposure Mechanism");
+    detail[63] = new Array("Living Dependency", "Living Arrangement", "Patient Primary Facility", "Patient Primary Care Provider Name & ID No.", "Student Indicator", "Handicap", "Living Will", "Organ Donor", "Separate Bill", "Duplicate Patient", "Publicity Code", "Protection Indicator");
+    detail[64] = new Array("Manufacturer/Distributor", "Country", "Brand Name", "Device Family Name", "Generic Nae", "Model Identifier", "Catalogue Identifier", "Other Identifier", "Product Code", "Marketing Basis", "Marketing Approval ID", "Labeled Shelf Life", "Expected Shelf Life", "Date First Marketed", "Date Last Marketed");
+    detail[65] = new Array("Event Identifiers Used", "Event Symptom/Diagnosis Code", "Event Onset Date/Time", "Event Exacerbation Date/Time", "Event Improved Date/Time", "Event Ended Data/Time", "Event Location Occurred Address", "Event Qualification", "Event Serious", "Event Expected", "Event Outcome", "Patient Outcome", "Event Description From Others", "Event From Original Reporter", "Event Description From Patient", "Event Description From Practitioner", "Event Description From Autopsy", "Cause Of Death", "Primary Observer Name", "Primary Observer Address", "Primary Observer Telephone", "Primary Observer s Qualification", "Confirmation Provided By", "Primary Observer Aware Date/Time", "Primary Observer s identity May Be Divulged");
+    detail[66] = new Array("Sender Organization Name", "Sender Individual Name", "Sender Address", "Sender Telephone", "Sender Event Identifier", "Sender Sequence Number", "Sender Event Description", "Sender Comment", "Sender Aware Date/Time", "Event Report Date", "Event Report Timing/Type", "Event Report Source", "Event Reported To");
+    detail[67] = new Array("Set ID - PID", "Patient ID", "Patient Identifier List", "Alternate Patient ID - PID", "Patient Name", "Mother s Maiden Name", "Date/Time Of Birth", "Sex", "Patient Alias", "Race", "Patient Address", "County Code", "Phone Number - Home", "Phone Number - Business", "Primary Language", "Marital Status", "Religion", "Patient Account Number", "SSN Number - Patient", "Driver's License Number - Patient", "Mother's Identifier", "Ethnic Group", "Birth Place", "Multiple Birth Indicator", "Birth Order", "Citizenship", "Veterans Military Status", "Nationality", "Patient Death Date and Time", "Patient Death Indicator");
+    detail[68] = new Array("Set ID - PR1", "Procedure Coding Method", "Procedure Code", "Procedure Description", "Procedure Date/Time", "Procedure Functional Type", "Procedure Minutes", "Anesthesiologist", "Anesthesia Code", "Anesthesia Minutes", "Surgeon", "Procedure Practitioner", "Consent Code", "Procedure Priority", "Associated Diagnosis Code", "Procedure Code Modifier");
+    detail[69] = new Array("Primary Key Value - PRA", "Practitioner Group", "Practitioner Category", "Provider Billing", "Specialty", "Practitioner ID Numbers", "Privileges", "Date Entered Practice");
+    detail[70] = new Array("Action Code", "Action Date/Time", "Problem ID", "Problem Instance ID", "Episode of Care ID", "Problem List Priority", "Problem Established Date/Time", "Anticipated Problem Resolution Date/Time", "Actual Problem Resolution Date/Time", "Problem Classification", "Problem Management Discipline", "Problem Persistence", "Problem Confirmation Status", "Problem Life Cycle Status", "Problem Life Cycle Status Date/Time", "Problem Date of Onset", "Problem Onset Text", "Problem Ranking", "Certainty of Problem", "Probability of Problem", "Individual Awareness of Problem", "Problem Prognosis", "Individual Awareness of Prognosis", "Family/Significant Other Awareness of Problem/Prognosis", "Security/Sensitivity");
+    detail[71] = new Array("Set ID - PV1", "Patient Class", "Assigned Patient Location", "Admission Type", "Preadmit Number", "Prior Patient Location", "Attending Doctor", "Referring Doctor", "Consulting Doctor", "Hospital Service", "Temporary Location", "Preadmit Test Indicator", "Re-admission Indicator", "Admit Source", "Ambulatory Status", "VIP Indicator", "Admitting Doctor", "Patient Type", "Visit Number", "Financial Class", "Charge Price Indicator", "Courtesy Code", "Credit Rating", "Contract Code", "Contract Effective Date", "Contract Amount", "Contract Period", "Interest Code", "Transfer to Bad Debt Code", "Transfer to Bad Debt Date", "Bad Debt Agency Code", "Bad Debt Transfer Amount", "Bad Debt Recovery Amount", "Delete Account Indicator", "Delete Account Date", "Discharge Disposition", "Discharged to Location", "Diet Type", "Servicing Facility", "Bed Status", "Account Status", "Pending Location", "Prior Temporary Location", "Admit Date/Time", "Discharge Date/Time", "Current Patient Balance", "Total Charges", "Total Adjustments", "Total Payments", "Alternate Visit ID", "Visit Indicator", "Other Healthcare Provider");
+    detail[72] = new Array("Order Control", "Placer Order Number", "Filler Order Number", "Placer Group Number", "Order Status", "Response Flag", "Quantity/Timing", "Parent Order", "Date/Time of Transaction", "Entered By", "Verified By", "Ordering Provider", "Enterer s Location", "Call Back Phone Number", "Order Effective Date/Time", "Order Control Code Reason", "Entering Organization", "Entering Device", "Action By", "Advanced Beneficiary Notice Code", "Ordering Facility Name", "Ordering Facility Address", "Ordering Facility Phone Number", "Ordering Provider Address");
+    detail[73] = new Array("Prior Pending Location", "Accommodation Code", "Admit Reason", "Transfer Reason", "Patient Valuables", "Patient Valuables Location", "Visit User Code", "Expected Admit Date/Time", "Expected Discharge Date/Time", "Estimated Length of Inpatient Stay", "Actual Length of Inpatient Stay", "Visit Description", "Referral Source Code", "Previous Service Date", "Employment Illness Related Indicator", "Purge Status Code", "Purge Status Date", "Special Program Code", "Retention Indicator", "Expected Number of Insurance Plans", "Visit Publicity Code", "Visit Protection Indicator", "Clinic Organization Name", "Patient Status Code", "Visit Priority Code", "Previous Treatment Date", "Expected Discharge Disposition", "Signature on File Date", "First Similar Illness Date", "Patient Charge Adjustment Code", "Recurring Service Code", "Billing Media Code", "Expected Surgery Date & Time", "Military Partnership Code", "Military Non-Availability Code", "Newborn Baby Indicator", "Baby Detained Indicator");
+    detail[74] = new Array("Placer Appointment ID", "Filler Appointment ID", "Occurrence Number", "Placer Group Number", "Schedule ID", "Event Reason", "Appointment Reason", "Appointment Type", "Appointment Duration", "Appointment Duration Units", "Appointment Timing Quantity", "Placer Contact Person", "Placer Contact Phone Number", "Placer Contact Address", "Placer Contact Location", "Filler Contact Person", "Filler Contact Phone Number", "Filler Contact Address", "Filler Contact Location", "Entered by Person", "Entered by Phone Number", "Entered by Location", "Parent Placer Appointment ID", "Parent Filler Appointment ID", "Filler Status Code");
+    detail[75] = new Array("Set ID - RGS", "Segment Action Code", "Resource Group ID");
+
+    function parse() {
+
+      while (document.getElementById("trythis").firstChild) {
+        document.getElementById("trythis").removeChild(document.getElementById("trythis").firstChild);
+      }
+      while (document.getElementById("leftsidespace").firstChild) {
+        document.getElementById("leftsidespace").removeChild(document.getElementById("leftsidespace").firstChild);
+      }
+      while (document.getElementById("leftRightSidespace").firstChild) {
+        document.getElementById("leftRightSidespace").removeChild(document.getElementById("leftRightSidespace").firstChild);
+      }
+      enteredText = document.getElementById("HL7").value;
+      var fullmessage = enteredText;
+
+      enteredText = fullmessage;
+      var entireMessage = fullmessage;
+      var indIndex;
+      var numMessage = [];
+      var multiMessageText = enteredText;
+      var indexCounter = 0;
+      while ((indIndex = multiMessageText.search(/(MSH)/g)) != -1) {
+        if (indexCounter > 0) {
+          adjustedIndex = indIndex + 3 + numMessage[indexCounter - 1];
+          numMessage.push(adjustedIndex);
+          indexCounter++;
+        }
+        else {
+          numMessage.push(indIndex);
+          indexCounter++
+        }
+        multiMessageText = multiMessageText.substring(indIndex + 3)
+      }
+      numMessage.push(fullmessage.length);
+      var messageLength = numMessage.length - 1;
+      var TotalTree = document.createDocumentFragment();
+      for (var multMessageLoop = 0; multMessageLoop < messageLength; multMessageLoop++) {
+        var hugeTree = document.createDocumentFragment();
+        
+        var messageButton = document.createElement("button");
+        messageButton.setAttribute("id", "message" + multMessageLoop.toString());
+        messageButton.setAttribute("class", "btn btn-primary btn-lg");
+        messageButton.setAttribute("onclick", "showMessage(this.id)");
+        messageButton.setAttribute("style", "border-bottom-style: solid; border-color: white; margin-top: 5px; border-width: 3px");
+        if(multMessageLoop > 18){
+          document.getElementById("leftRightSidespace").appendChild(messageButton);
+        }else{
+          document.getElementById("leftsidespace").appendChild(messageButton);
+        }
+        document.getElementById("message" + multMessageLoop.toString()).innerHTML = "Message " + (multMessageLoop + 1).toString();
+        enteredText = entireMessage.substring(numMessage[multMessageLoop], numMessage[multMessageLoop + 1]).trim();
+        enteredText = split(enteredText);
+        numberOfLineBreaks = (enteredText.match(/\n/g)||[]).length;
+        var nextSeg = enteredText;
+        fullmessage = enteredText;
+        var uniqueSeperator = 1;
+        var seperator = fullmessage.substring(3, 4);
+        var subSeperator = fullmessage.substring(4, 5);
+        var repeatSeperator = fullmessage.substring(5, 6);
+        var subsubSeperator = fullmessage.substring(7, 8);
+        var nextHead = "";
+        var segCounter = 2;
+        for (var i = 1; i < numberOfLineBreaks + 2; i++) {
+          var accordionTree = document.createDocumentFragment();
+          var accordionCreate = document.createElement("button");
+          accordionTree.appendChild(accordionCreate);
+          //accordionCreate.appendChild(panelCreate);
+          hugeTree.appendChild(accordionTree);
+          accordionCreate.setAttribute("class", "accordion");
+          accordionCreate.setAttribute("id", (i).toString() + "." + multMessageLoop.toString());
+          accordionCreate.setAttribute("style", "display: none")
+          var pos = nextSeg.search(/\n/g);
+          if (i == 1) {
+            var sectionHead = nextSeg.substring(0, 3);
+            accordionCreate.innerHTML = sectionHead;
+          }
+          else {
+            nextHead = sectionHead;
+            var sectionHead = nextSeg.substring(0, 3);
+          }
+         /* if (nextHead == sectionHead) {
+            document.getElementById((i - 1).toString() + "." + multMessageLoop.toString()).innerHTML = sectionHead + "   -----   |" + (segCounter - 1).toString() + "|";
+            document.getElementById(i.toString() + "." + multMessageLoop.toString()).innerHTML = sectionHead + "   -----   |" + segCounter.toString() + "|";
+            segCounter++;
+          }
+          else */
+          //  segCounter = 2;
+            accordionCreate.innerHTML = sectionHead;
+         // }
+          var panelCreate = document.createElement("div");
+          panelCreate.setAttribute("class", "panel");
+          panelCreate.setAttribute("id", (i.toString() + "text" + multMessageLoop.toString()));
+          hugeTree.appendChild(panelCreate);
+
+          nextSeg = nextSeg.substring(pos + 1);
+          var posSearch = enteredText.search(/\n/g);
+          if (posSearch == -1) {
+            posSearch = nextSeg.length;
+          }
+          var segment = enteredText.substring(0, posSearch).trim();
+          enteredText = enteredText.substring(posSearch).trim();
+          //document.getElementById("title").innerHTML = enteredText;
+          if (segment.substring(segment.length - 1, segment.length) != seperator) {
+            segment += seperator;
+          }
+          var SegArray = segment.split(seperator);
+          //var maintree = document.createDocumentFragment();
+          var main = document.createElement("div");
+          main.setAttribute("id", "dynamicRow" + segment.substring(0, 3) + uniqueSeperator.toString() + "." + multMessageLoop.toString().toString());
+          main.setAttribute("class", "container");
+          //maintree.appendChild(main);
+          panelCreate.appendChild(main);
+          var prettyRow = 0;
+          var SegArrayLength =  SegArray.length - 1;
+          for (var x = 1; x < SegArrayLength ; x++) {
+            if (SegArray[x] != "") {
+              prettyRow++;
+              var tree = document.createDocumentFragment();
+              var div = document.createElement("div");
+              var column1 = document.createElement("div");
+              var column2 = document.createElement("div");
+              var column3 = document.createElement("div");
+              div.setAttribute("id", segment.substring(0, 3) + "dynamic" + x.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+              div.setAttribute("class", "row");
+              div.setAttribute("style", "background-color: #f2f2f2");
+
+              column1.setAttribute("id", segment.substring(0, 3) + "col1row" + x.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+              column1.setAttribute("class", "col-xs-2");
+              column2.setAttribute("id", segment.substring(0, 3) + "col2row" + x.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+              column2.setAttribute("class", "col-sm-4");
+              column3.setAttribute("id", segment.substring(0, 3) + "col3row" + x.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+              column3.setAttribute("class", "col-md-6");
+
+              tree.appendChild(div);
+              div.appendChild(column1);
+              div.appendChild(column2);
+              div.appendChild(column3);
+              main.appendChild(tree);
+
+              var repeatingArray = SegArray[x].split(repeatSeperator);
+              var repeatingArrayLength = repeatingArray.length;
+              for (var r = 0; r < repeatingArrayLength; r++) {
+                var subComponent = repeatingArray[r].split(subSeperator);
+                if (subComponent.length > 1) {
+                  var subCont = document.createElement("div");
+                  subCont.setAttribute("id", x.toString() + segment.substring(0, 3) + "subDynamicRow" + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+                  subCont.setAttribute("class", "coolcontainer");
+                  main.appendChild(subCont);
+                  var prettySubRow = 0;
+                  var subComponentLength = subComponent.length;
+                  for (var q = 0; q < subComponentLength; q++) {
+                    if (subComponent[q] != "") {
+
+                      var subDiv = document.createElement("div");
+                      var subColumn1 = document.createElement("div");
+                      var subColumn2 = document.createElement("div");
+                      var subColumn3 = document.createElement("div");
+
+                      subDiv.setAttribute("id", "subDynamic" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+                      subDiv.setAttribute("class", "row");
+                      //subDiv.setAttribute("style", "border-style: inset");
+                      subDiv.setAttribute("style", "background-color: #e6e6e6");
+
+                      subColumn1.setAttribute("id", segment.substring(0, 3) + "subcol1row" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                      subColumn1.setAttribute("class", "col-xs-2");
+                      subColumn2.setAttribute("id", segment.substring(0, 3) + "subcol2row" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                      subColumn2.setAttribute("class", "col-sm-4");
+                      subColumn3.setAttribute("id", segment.substring(0, 3) + "subcol3row" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                      subColumn3.setAttribute("class", "col-md-6");
+
+                      subDiv.appendChild(subColumn1);
+                      subDiv.appendChild(subColumn2);
+                      subDiv.appendChild(subColumn3);
+                      subCont.appendChild(subDiv);
+                      if (repeatingArray.length > 1) {
+                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString();
+                      }
+                      else if (segment.substring(0, 3) == "MSH") {
+                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x + 1).toString() + "." + (q + 1).toString();
+                      }
+                      else {
+                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "." + (q + 1).toString();
+                      }
+                      //document.getElementById(segment.substring(0,3)+"subcol2row"+x.toString()+"."+q.toString()+"."+segment.substring(4,5)).innerHTML = MSHdetail[x];
+                      var subsubComponent = subComponent[q].split(subsubSeperator);
+                      if (subsubComponent.length > 1) {
+                        subColumn3.innerHTML = "--->";
+                      }
+                      else {
+                        subColumn3.innerHTML = subComponent[q];
+                      }
+                      if (subsubComponent.length > 1) {
+                        var subsubCont = document.createElement("div");
+                        subsubCont.setAttribute("id", x.toString() + segment.substring(0, 3) + "subsubDynamicRow" + "." + uniqueSeperator.toString() + q.toString() + "." + multMessageLoop.toString());
+                        subsubCont.setAttribute("class", "subContainer");
+                        subCont.appendChild(subsubCont);
+                        var subsubComponentLength = subsubComponent.length;
+                        for (var s = 0; s < subsubComponentLength; s++) {
+                          if (subsubComponent[s] != "") {
+                            var subsubDiv = document.createElement("div");
+                            var subsubColumn1 = document.createElement("div");
+                            var subsubColumn2 = document.createElement("div");
+                            var subsubColumn3 = document.createElement("div");
+
+                            subsubDiv.setAttribute("id", "subsubDynamic" + x.toString() + "." + q.toString() + "." + s.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+                            subsubDiv.setAttribute("class", "row");
+                            //subDiv.setAttribute("style", "border-style: inset");
+                            subsubDiv.setAttribute("style", "background-color: #d9d9d9");
+
+                            subsubColumn1.setAttribute("id", segment.substring(0, 3) + "subsubcol1row" + x.toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                            subsubColumn1.setAttribute("class", "col-xs-2");
+                            subsubColumn2.setAttribute("id", segment.substring(0, 3) + "subsubcol2row" + x.toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                            subsubColumn2.setAttribute("class", "col-sm-4");
+                            subsubColumn3.setAttribute("id", segment.substring(0, 3) + "subsubcol3row" + x.toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                            subsubColumn3.setAttribute("class", "col-md-6");
+
+                            subsubDiv.appendChild(subsubColumn1);
+                            subsubDiv.appendChild(subsubColumn2);
+                            subsubDiv.appendChild(subsubColumn3);
+                            subsubCont.appendChild(subsubDiv);
+                            if (repeatingArray.length > 1) {
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString() + "." + (s + 1).toString();
+                            }
+                            else if (segment.substring(0, 3) == "MSH") {
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x + 1).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
+                            }
+                            else {
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
+                            }
+                            //document.getElementById(segment.substring(0,3)+"subcol2row"+x.toString()+"."+q.toString()+"."+segment.substring(4,5)).innerHTML = MSHdetail[x];
+                            subsubColumn3.innerHTML = subsubComponent[s];
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              var findSegInfo = detailLookup.indexOf(segment.substring(0, 3));
+              if (segment.substring(0, 3) == "MSH") {
+                column1.innerHTML = segment.substring(0, 3) + "." + (x + 1).toString();
+              }
+              else {
+                column1.innerHTML = segment.substring(0, 3) + "." + (x).toString();
+              }
+              if (subComponent.length == 1) {
+                column3.innerHTML = SegArray[x];
+              } 
+              else {
+                column3.innerHTML = "--->";
+              }
+              //column2.innerHTML = detail[findSegInfo][x - 1];
+            }
+          }
+          uniqueSeperator++;
+        }
+        TotalTree.appendChild(hugeTree);
+      }
+      document.getElementById("trythis").appendChild(TotalTree);
+      //for (var i=0; i<12; i++){
+      //document.getElementById(seglookup[i]).style.display= "none";
+      //}
+      //for (var i=0; i<numberOfLineBreaks+1; i++){
+      //document.getElementById(seglookup[i]).style.display= "block";
+      //}l
+      var acc = document.getElementsByClassName("accordion");
+      var i;
+      var accLength = acc.length;
+      for (i = 0; i < accLength; i++) {
+        acc[i].onclick = function() {
+          this.classList.toggle("active");
+          this.nextElementSibling.classList.toggle("show");
+          var rect = this.getBoundingClientRect();
+          var goal = rect.top + window.pageYOffset;
+          var getID = this.getAttribute('id');
+          var findClass = this.className;
+          if (findClass == "accordion active") {
+            EPPZScrollTo.scrollVerticalTickToPosition(window.pageYOffset, goal-2);
+          }
+
+        }
+      }
+    }
+
+    function split(fullmessage) {
+      var enteredText = fullmessage;
+      var detailLookupLength = detailLookup.length;
+      for (var k = 0; k < detailLookupLength; k++) {
+        var re = new RegExp("(" + detailLookup[k].toString() + "\\|)");
+        var splitIndex;
+        var splitIndexCounter=0;
+        var prevSplitIndex=0;
+        enteredText = fullmessage;
+        while ((enteredText.search(re) != -1) && (detailLookup[k]!="MSH")) {
+          splitIndex = enteredText.search(re);
+          var test = enteredText.substring(splitIndex-1,splitIndex);
+          if(enteredText.substring(splitIndex-1,splitIndex) == "\n"){
+            break;
+          }else{
+            if (splitIndexCounter > 0) {
+              fullmessage = fullmessage.slice(0,prevSplitIndex)+fullmessage.slice(prevSplitIndex, splitIndex+prevSplitIndex)+"\n"+fullmessage.slice(splitIndex+prevSplitIndex);
+              enteredText = enteredText.substring(splitIndex+3);
+              splitIndex++;
+              splitIndexCounter++;
+            }
+            else {
+              fullmessage = fullmessage.slice(0,splitIndex)+ "\n" + fullmessage.slice(splitIndex);
+              enteredText = fullmessage.substring(splitIndex+3);
+              splitIndexCounter++;
+            }
+          }
+        prevSplitIndex += splitIndex+3;
+        }
+      splitIndexCounter=0;  
+      }
+      return fullmessage;
+    }
+
+    function showMessage(id) {
+      var getColor = "";
+      var onScreen = document.querySelectorAll('*[style*="display: block"]');
+      var onScreenLength = onScreen.length;
+      for (var i = 0; i < onScreenLength; i++) {
+        onScreen[i].nextElementSibling.classList = "panel";
+        getColor = onScreen[i].style.backgroundColor;
+        onScreen[i].style = "display: none; background-color: " + getColor.toString();
+      }
+      var y = 1;
+      var findId = id.substring(id.lastIndexOf("e")+1, id.length);
+      while (document.getElementById(y.toString() + "." + findId.toString()) != null) {
+        getColor = document.getElementById(y.toString() + "." + findId.toString()).style.backgroundColor;
+        document.getElementById(y.toString() + "." + findId.toString()).setAttribute("class", "accordion");
+        document.getElementById(y.toString() + "." + findId.toString()).setAttribute("style", "display: block; background-color: " +getColor.toString());
+        y++;
+      }
+      //EPPZScrollTo.scrollVerticalTickToPosition(window.pageYOffset, 455);
+    }
+
+    function searchMessages() {
+      var searchText = document.getElementById("SearchField").value;
+      if(searchText == ""){
+        return;
+      }
+      var possibleSearchLoactions = document.querySelectorAll('*[class="col-md-6"]');
+      var possibleSearchLoactionsLength = possibleSearchLoactions.length;
+      for(var locate=0; locate<possibleSearchLoactionsLength;locate++){
+        if(possibleSearchLoactions[locate].innerHTML.includes(searchText)){
+          var findMessageId = possibleSearchLoactions[locate].getAttribute("id");
+          var multiMessageId = "message" + findMessageId.substring(findMessageId.lastIndexOf(".")+1, findMessageId.length).toString();
+          document.getElementById(multiMessageId).setAttribute("style", "border-bottom-style: solid; border-width: 3px; border-color: #ffff00; margin-top: 5px");
+          var foundSearch = possibleSearchLoactions[locate].parentElement;
+          foundSearch.setAttribute("style","background-color: #ffff99");
+          if(possibleSearchLoactions[locate].getAttribute('id').includes("sub")){
+            var currentAttribute = foundSearch.parentElement.parentElement.parentElement.previousSibling.getAttribute("style");
+            foundSearch.parentElement.parentElement.parentElement.previousSibling.setAttribute("style","background-color: #ffffb3; "+currentAttribute.toString());
+          }else{
+            var currentAttribute = foundSearch.parentElement.parentElement.previousSibling.getAttribute("style");
+            foundSearch.parentElement.parentElement.previousSibling.setAttribute("style","background-color: #ffffb3; "+currentAttribute.toString());
+          }
+        }
+      }
+    }
+    function resetSearch(){
+      var firstShade = document.querySelectorAll('*[style*="background-color: #ffff99"]');
+      var secondShade = document.querySelectorAll('*[style*="background-color: #ffffb3"]');
+      var thridShade = document.querySelectorAll('*[style*="background-color: rgb(255, 255, 179)"]');
+      var multiMessageButtons = document.querySelectorAll('*[onclick*="showMessage"]');
+      var firstShadeLength = firstShade.length;
+      for(var a=0; a<firstShadeLength; a++){
+        firstShade[a].style.backgroundColor = "";
+      }
+      var secondShadeLength = secondShade.length;
+      for(var b=0; b<secondShadeLength; b++){
+        secondShade[b].style.backgroundColor = "";
+      }
+      var multiMessageButtonsLength = multiMessageButtons.length;
+      for(var c=0; c<multiMessageButtonsLength; c++){
+        multiMessageButtons[c].style.borderColor = "white";
+      }
+      var thridShadeLength = thridShade.length;
+      for(var d=0; d<thridShadeLength; d++){
+        thridShade[d].style.backgroundColor = "";
+      }
+    }
+
+    var EPPZScrollTo = {
+      scrollVerticalTickToPosition: function(currentPosition, targetPosition) {
+        var filter = 0.2;
+        var fps = 60;
+        var difference = parseFloat(targetPosition) - parseFloat(currentPosition);
+        var arrived = (Math.abs(difference) <= 0.5);
+        if (arrived) {
+          scrollTo(0.0, targetPosition);
+          return;
+        }
+        currentPosition = (parseFloat(currentPosition) * (1.0 - filter)) + (parseFloat(targetPosition) * filter);
+        scrollTo(0.0, Math.round(currentPosition));
+        setTimeout("EPPZScrollTo.scrollVerticalTickToPosition(" + currentPosition + ", " + targetPosition + ")", (1000 / fps));
+      }
+    };
+
+  </script>
+
+  <body>
+
+    <div id="buttonspace" class="container">
+      <a href="javascript:parse()" id="show_whatever" class="btn btn-primary btn-lg">Parse</a>
+      <a href="javascript:searchMessages()" id="searchButton" class="btn btn-primary btn-lg">Search</a>
+      <textarea class="form-control" rows="1" cols="1" style="width: 150px" id="SearchField"></textarea>
+      <a href="javascript:resetSearch()" id="reset" class="btn btn-primary btn-lg" style="margin-left: 10px">Reset</a>
+      <p></p>
+      <div id="trythis"></div>
+  </body>
+  </div>
+</div>
+<div id="bottomPage"></div>

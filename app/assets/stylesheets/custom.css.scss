@@ -1,0 +1,230 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+/* universal */+
+
+
+div.hidden { display: none; }
+
+body {
+  padding-top: 30px;
+  height: 1080px;
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+}
+
+.center h1 {
+  margin-bottom: 10px;
+}
+
+/* typography */
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+}
+
+h1 {
+  font-size: 3em;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.2em;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: normal;
+  color: #777;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.7em;
+}
+
+/* header */
+
+#logo {
+  float: left;
+  margin-right: 10px;
+  font-size: 1.7em;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  padding-top: 9px;
+  font-weight: bold;
+}
+
+#logo:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* footer */
+
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  color: #777;
+}
+
+footer a {
+  color: #555;
+}
+
+footer a:hover {
+  color: #222;
+}
+
+footer small {
+  float: left;
+}
+
+footer ul {
+  float: right;
+  list-style: none;
+}
+
+footer ul li {
+  float: left;
+  margin-left: 15px;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    margin-bottom: 2px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+button.accordion.active, button.accordion:hover {
+    background-color: #ddd;
+}
+
+
+
+div.coolcontainer{
+  padding: 0 22px;
+  border-top-style: solid;
+  border-color: white;
+  border-width: 2px;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+div.panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+}
+
+/* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */
+div.panel.show {
+    display: block !important;
+}
+
+button.accordion:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+button.accordion.active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+div.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.6s ease-in-out;
+    opacity: 0;
+}
+
+div.panel.show {
+    opacity: 1;
+    max-height: 2000px; /* Whatever you like, as long as its more than the height of the content (on all screen sizes) */
+}
+
+div.row{
+  border-bottom-style: solid;
+  border-width: 2px;
+  border-color: white;
+}
+div.subContainer{
+  padding: 0 35px;
+  border-top-style: solid;
+  border-color: white;
+  border-width: 2px;
+}
+div.leftContainer{
+    text-align: left;
+    border: none;
+    outline: none;
+    width: 123px;
+    margin-left: 10px;
+    float: left;
+}
+
+div.leftRightContainer{
+    text-align: left;
+    border: none;
+    outline: none;
+    width: 123px;
+    margin-left: 10px;
+    float: left;
+}
+
+div.leftSmallContainer{
+    text-align: left;
+    border: none;
+    outline: none;
+    width: 60px;
+    margin-top: 100px;
+    margin-left: 10px;
+    float: left;
+}
+
+div.mainContainer{
+    text-align: left;
+    width: 1920px;
+    height: 1080px;
+    float: left;
+}
+#maincont{
+    float: center;
+}
+#buttonspace{
+  padding: 0 0px;
+}
+#bottomPage{
+  height: 50px;
+}
+#SearchField, #searchButton, #show_whatever{
+  float: left;
+  margin-left: 10px; 
+  margin-bottom: 10px;
+}
