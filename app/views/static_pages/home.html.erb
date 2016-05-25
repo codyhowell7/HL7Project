@@ -89,6 +89,7 @@
     detail[73] = new Array("Prior Pending Location", "Accommodation Code", "Admit Reason", "Transfer Reason", "Patient Valuables", "Patient Valuables Location", "Visit User Code", "Expected Admit Date/Time", "Expected Discharge Date/Time", "Estimated Length of Inpatient Stay", "Actual Length of Inpatient Stay", "Visit Description", "Referral Source Code", "Previous Service Date", "Employment Illness Related Indicator", "Purge Status Code", "Purge Status Date", "Special Program Code", "Retention Indicator", "Expected Number of Insurance Plans", "Visit Publicity Code", "Visit Protection Indicator", "Clinic Organization Name", "Patient Status Code", "Visit Priority Code", "Previous Treatment Date", "Expected Discharge Disposition", "Signature on File Date", "First Similar Illness Date", "Patient Charge Adjustment Code", "Recurring Service Code", "Billing Media Code", "Expected Surgery Date & Time", "Military Partnership Code", "Military Non-Availability Code", "Newborn Baby Indicator", "Baby Detained Indicator");
     detail[74] = new Array("Placer Appointment ID", "Filler Appointment ID", "Occurrence Number", "Placer Group Number", "Schedule ID", "Event Reason", "Appointment Reason", "Appointment Type", "Appointment Duration", "Appointment Duration Units", "Appointment Timing Quantity", "Placer Contact Person", "Placer Contact Phone Number", "Placer Contact Address", "Placer Contact Location", "Filler Contact Person", "Filler Contact Phone Number", "Filler Contact Address", "Filler Contact Location", "Entered by Person", "Entered by Phone Number", "Entered by Location", "Parent Placer Appointment ID", "Parent Filler Appointment ID", "Filler Status Code");
     detail[75] = new Array("Set ID - RGS", "Segment Action Code", "Resource Group ID");
+    detail[76] = new Array("????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????");
 
     function parse() {
 
@@ -331,6 +332,9 @@
                 }
               }
               var findSegInfo = detailLookup.indexOf(segment.substring(0, 3));
+              if(findSegInfo == -1){
+                findSegInfo = 76;
+              }
               if (segment.substring(0, 3) == "MSH") {
                 column1.innerHTML = segment.substring(0, 3) + "." + (x+2).toString();
               }
