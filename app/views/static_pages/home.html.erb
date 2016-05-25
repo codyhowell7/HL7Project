@@ -130,10 +130,10 @@
         
         var messageButton = document.createElement("button");
         messageButton.setAttribute("id", "message" + multMessageLoop.toString());
-        messageButton.setAttribute("class", "btn btn-primary btn-lg");
+        messageButton.setAttribute("class", "btn btn-primary btn-lg pretty");
         messageButton.setAttribute("onclick", "showMessage(this.id)");
         messageButton.setAttribute("style", "border-bottom-style: solid; border-color: white; margin-top: 5px; border-width: 3px");
-        if(multMessageLoop > 18){
+        if(multMessageLoop > 19){
           document.getElementById("leftRightSidespace").appendChild(messageButton);
         }else{
           document.getElementById("leftsidespace").appendChild(messageButton);
@@ -202,8 +202,11 @@
           //maintree.appendChild(main);
           panelCreate.appendChild(main);
           var prettyRow = 0;
-          var SegArrayLength =  SegArray.length - 1;
-          for (var x = 1; x < SegArrayLength ; x++) {
+          var SegArrayLength =  SegArray.length;
+          for (var x = 0; x < SegArrayLength ; x++) {
+            if(x == 0){
+              continue;
+            }
             if (SegArray[x] != "") {
               prettyRow++;
               var tree = document.createDocumentFragment();
@@ -211,15 +214,15 @@
               var column1 = document.createElement("div");
               var column2 = document.createElement("div");
               var column3 = document.createElement("div");
-              div.setAttribute("id", segment.substring(0, 3) + "dynamic" + x.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+              div.setAttribute("id", segment.substring(0, 3) + "dynamic" + (x+1).toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
               div.setAttribute("class", "row");
               div.setAttribute("style", "background-color: #f2f2f2");
 
-              column1.setAttribute("id", segment.substring(0, 3) + "col1row" + x.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+              column1.setAttribute("id", segment.substring(0, 3) + "col1row" + (x+1).toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
               column1.setAttribute("class", "col-xs-2");
-              column2.setAttribute("id", segment.substring(0, 3) + "col2row" + x.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+              column2.setAttribute("id", segment.substring(0, 3) + "col2row" + (x+1).toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
               column2.setAttribute("class", "col-sm-4");
-              column3.setAttribute("id", segment.substring(0, 3) + "col3row" + x.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+              column3.setAttribute("id", segment.substring(0, 3) + "col3row" + (x+1).toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
               column3.setAttribute("class", "col-md-6");
 
               tree.appendChild(div);
@@ -234,7 +237,7 @@
                 var subComponent = repeatingArray[r].split(subSeperator);
                 if (subComponent.length > 1) {
                   var subCont = document.createElement("div");
-                  subCont.setAttribute("id", x.toString() + segment.substring(0, 3) + "subDynamicRow" + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+                  subCont.setAttribute("id", (x+1).toString() + segment.substring(0, 3) + "subDynamicRow" + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
                   subCont.setAttribute("class", "coolcontainer");
                   main.appendChild(subCont);
                   var prettySubRow = 0;
@@ -252,11 +255,11 @@
                       //subDiv.setAttribute("style", "border-style: inset");
                       subDiv.setAttribute("style", "background-color: #e6e6e6");
 
-                      subColumn1.setAttribute("id", segment.substring(0, 3) + "subcol1row" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                      subColumn1.setAttribute("id", segment.substring(0, 3) + "subcol1row" + (x+1).toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                       subColumn1.setAttribute("class", "col-xs-2");
-                      subColumn2.setAttribute("id", segment.substring(0, 3) + "subcol2row" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                      subColumn2.setAttribute("id", segment.substring(0, 3) + "subcol2row" + (x+1).toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                       subColumn2.setAttribute("class", "col-sm-4");
-                      subColumn3.setAttribute("id", segment.substring(0, 3) + "subcol3row" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                      subColumn3.setAttribute("id", segment.substring(0, 3) + "subcol3row" + (x+1).toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                       subColumn3.setAttribute("class", "col-md-6");
 
                       subDiv.appendChild(subColumn1);
@@ -264,10 +267,10 @@
                       subDiv.appendChild(subColumn3);
                       subCont.appendChild(subDiv);
                       if (repeatingArray.length > 1) {
-                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString();
+                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString();
                       }
                       else if (segment.substring(0, 3) == "MSH") {
-                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x + 1).toString() + "." + (q + 1).toString();
+                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x + 2).toString() + "." + (q + 1).toString();
                       }
                       else {
                         subColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "." + (q + 1).toString();
@@ -282,7 +285,7 @@
                       }
                       if (subsubComponent.length > 1) {
                         var subsubCont = document.createElement("div");
-                        subsubCont.setAttribute("id", x.toString() + segment.substring(0, 3) + "subsubDynamicRow" + "." + uniqueSeperator.toString() + q.toString() + "." + multMessageLoop.toString());
+                        subsubCont.setAttribute("id", (x+1).toString() + segment.substring(0, 3) + "subsubDynamicRow" + "." + uniqueSeperator.toString() + q.toString() + "." + multMessageLoop.toString());
                         subsubCont.setAttribute("class", "subContainer");
                         subCont.appendChild(subsubCont);
                         var subsubComponentLength = subsubComponent.length;
@@ -293,16 +296,16 @@
                             var subsubColumn2 = document.createElement("div");
                             var subsubColumn3 = document.createElement("div");
 
-                            subsubDiv.setAttribute("id", "subsubDynamic" + x.toString() + "." + q.toString() + "." + s.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+                            subsubDiv.setAttribute("id", "subsubDynamic" + (x+1).toString() + "." + q.toString() + "." + s.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
                             subsubDiv.setAttribute("class", "row");
                             //subDiv.setAttribute("style", "border-style: inset");
                             subsubDiv.setAttribute("style", "background-color: #d9d9d9");
 
-                            subsubColumn1.setAttribute("id", segment.substring(0, 3) + "subsubcol1row" + x.toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                            subsubColumn1.setAttribute("id", segment.substring(0, 3) + "subsubcol1row" + (x+1).toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                             subsubColumn1.setAttribute("class", "col-xs-2");
-                            subsubColumn2.setAttribute("id", segment.substring(0, 3) + "subsubcol2row" + x.toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                            subsubColumn2.setAttribute("id", segment.substring(0, 3) + "subsubcol2row" + (x+1).toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                             subsubColumn2.setAttribute("class", "col-sm-4");
-                            subsubColumn3.setAttribute("id", segment.substring(0, 3) + "subsubcol3row" + x.toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
+                            subsubColumn3.setAttribute("id", segment.substring(0, 3) + "subsubcol3row" + (x+1).toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                             subsubColumn3.setAttribute("class", "col-md-6");
 
                             subsubDiv.appendChild(subsubColumn1);
@@ -310,13 +313,13 @@
                             subsubDiv.appendChild(subsubColumn3);
                             subsubCont.appendChild(subsubDiv);
                             if (repeatingArray.length > 1) {
-                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString() + "." + (s + 1).toString();
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString() + "." + (s + 1).toString();
                             }
                             else if (segment.substring(0, 3) == "MSH") {
-                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x + 1).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+2).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
                             }
                             else {
-                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
                             }
                             //document.getElementById(segment.substring(0,3)+"subcol2row"+x.toString()+"."+q.toString()+"."+segment.substring(4,5)).innerHTML = MSHdetail[x];
                             subsubColumn3.innerHTML = subsubComponent[s];
@@ -329,7 +332,7 @@
               }
               var findSegInfo = detailLookup.indexOf(segment.substring(0, 3));
               if (segment.substring(0, 3) == "MSH") {
-                column1.innerHTML = segment.substring(0, 3) + "." + (x + 1).toString();
+                column1.innerHTML = segment.substring(0, 3) + "." + (x+2).toString();
               }
               else {
                 column1.innerHTML = segment.substring(0, 3) + "." + (x).toString();
@@ -340,7 +343,7 @@
               else {
                 column3.innerHTML = "--->";
               }
-              //column2.innerHTML = detail[findSegInfo][x - 1];
+              column2.innerHTML = detail[findSegInfo][x-1];
             }
           }
           uniqueSeperator++;
@@ -412,7 +415,7 @@
       var onScreen = document.querySelectorAll('*[style*="display: block"]');
       var onScreenLength = onScreen.length;
       for (var i = 0; i < onScreenLength; i++) {
-        onScreen[i].nextElementSibling.classList = "panel";
+        onScreen[i].nextElementSibling.className = "panel";
         getColor = onScreen[i].style.backgroundColor;
         onScreen[i].style = "display: none; background-color: " + getColor.toString();
       }
@@ -495,10 +498,10 @@
   <body>
 
     <div id="buttonspace" class="container">
-      <a href="javascript:parse()" id="show_whatever" class="btn btn-primary btn-lg">Parse</a>
-      <a href="javascript:searchMessages()" id="searchButton" class="btn btn-primary btn-lg">Search</a>
+      <a href="javascript:parse()" id="show_whatever" class="btn btn-primary btn-lg pretty">Parse</a>
+      <a href="javascript:searchMessages()" id="searchButton" class="btn btn-primary btn-lg pretty">Search</a>
       <textarea class="form-control" rows="1" cols="1" style="width: 150px" id="SearchField"></textarea>
-      <a href="javascript:resetSearch()" id="reset" class="btn btn-primary btn-lg" style="margin-left: 10px">Reset</a>
+      <a href="javascript:resetSearch()" id="reset" class="btn btn-primary btn-lg pretty" style="margin-left: 10px">Reset</a>
       <p></p>
       <div id="trythis"></div>
   </body>

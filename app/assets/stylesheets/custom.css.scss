@@ -16,7 +16,7 @@ section {
 }
 
 textarea {
-  resize: vertical;
+  resize: none;
 }
 
 .center {
@@ -223,8 +223,96 @@ div.mainContainer{
 #bottomPage{
   height: 50px;
 }
-#SearchField, #searchButton, #show_whatever{
+#SearchField, #searchButton, #show_whatever, #reset{
   float: left;
   margin-left: 10px; 
   margin-bottom: 10px;
+}
+#SearchField{
+  height: 35px;
+  margin-top: 5px;
+}
+
+
+// colors
+$dark:  #333030;
+$ocean:  #2b90d9;
+$grass: #3ac569;
+$snow: #FFFFFF;
+$salmon: #ff7473;
+$sun: #feee7d;
+$alge: #79a8a9;
+$flower: #353866;
+
+
+
+// font import
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,500);
+
+
+
+// font
+$font-face: 'Roboto', sans-serif;
+
+
+
+// reset
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+button.pretty {
+  display: flex;
+  height: 30px;
+  box-sizing: border-box;
+  min-height: 4vh;
+
+  border: 20px solid whitesmoke;
+  background: $ocean;
+
+  font-family: $font-face;
+  font-size: 16px;
+  line-height: 1;
+
+  justify-content: center;
+  align-items: center;
+  
+  @media (min-width: 80px) {
+    border-width: 30px;
+  }
+}
+
+button.pretty.linked {
+  p {
+     color: rgba($dark, .3);
+  }
+}
+
+a.pretty {
+  display: flex;
+  height: 30px;
+  box-sizing: border-box;
+  min-height: 4vh;
+
+  background: $ocean;
+
+  font-family: $font-face;
+  font-size: 16px;
+  line-height: 1;
+
+  justify-content: center;
+  align-items: center;
+  
+  @media (min-width: 80px) {
+
+  }
+}
+
+a.pretty.linked {
+  p {
+     color: rgba($dark, .3);
+  }
 }
