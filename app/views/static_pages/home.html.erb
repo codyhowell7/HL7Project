@@ -1,7 +1,7 @@
 <div id="leftsidespace" class="leftContainer"></div>
 <div id="leftRightSidespace" class="leftRightContainer"></div>
 <div id="maincont" class="container">
-
+<textarea rows="0" style="display: none" id="store"></textarea>
   <div id="title" class="center jumbotron">
     <h1>HL7 Viewer</h1>
   </div>
@@ -90,9 +90,12 @@
     detail[74] = new Array("Placer Appointment ID", "Filler Appointment ID", "Occurrence Number", "Placer Group Number", "Schedule ID", "Event Reason", "Appointment Reason", "Appointment Type", "Appointment Duration", "Appointment Duration Units", "Appointment Timing Quantity", "Placer Contact Person", "Placer Contact Phone Number", "Placer Contact Address", "Placer Contact Location", "Filler Contact Person", "Filler Contact Phone Number", "Filler Contact Address", "Filler Contact Location", "Entered by Person", "Entered by Phone Number", "Entered by Location", "Parent Placer Appointment ID", "Parent Filler Appointment ID", "Filler Status Code");
     detail[75] = new Array("Set ID - RGS", "Segment Action Code", "Resource Group ID");
     detail[76] = new Array("????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????");
-
+    
+    var formatedMessage = [];
+    var multMessageLoop;
     function parse() {
-
+      formatedMessage = [];
+      document.getElementById("store").value = document.getElementById("HL7").value;
       while (document.getElementById("trythis").firstChild) {
         document.getElementById("trythis").removeChild(document.getElementById("trythis").firstChild);
       }
@@ -126,9 +129,12 @@
       numMessage.push(fullmessage.length);
       var messageLength = numMessage.length - 1;
       var TotalTree = document.createDocumentFragment();
-      for (var multMessageLoop = 0; multMessageLoop < messageLength; multMessageLoop++) {
+      
+      for (multMessageLoop = 0; multMessageLoop < messageLength; multMessageLoop++) {
         var hugeTree = document.createDocumentFragment();
-        
+        enteredText = entireMessage.substring(numMessage[multMessageLoop], numMessage[multMessageLoop + 1]).trim();
+        enteredText = split(enteredText);
+        formatedMessage.push(enteredText);
         var messageButton = document.createElement("button");
         messageButton.setAttribute("id", "message" + multMessageLoop.toString());
         messageButton.setAttribute("class", "btn btn-primary btn-lg pretty");
@@ -140,8 +146,6 @@
           document.getElementById("leftsidespace").appendChild(messageButton);
         }
         document.getElementById("message" + multMessageLoop.toString()).innerHTML = "Message " + (multMessageLoop + 1).toString();
-        enteredText = entireMessage.substring(numMessage[multMessageLoop], numMessage[multMessageLoop + 1]).trim();
-        enteredText = split(enteredText);
         numberOfLineBreaks = (enteredText.match(/\n/g)||[]).length;
         var nextSeg = enteredText;
         fullmessage = enteredText;
@@ -271,7 +275,7 @@
                         subColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString();
                       }
                       else if (segment.substring(0, 3) == "MSH") {
-                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x + 2).toString() + "." + (q + 1).toString();
+                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x + 1).toString() + "." + (q + 1).toString();
                       }
                       else {
                         subColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "." + (q + 1).toString();
@@ -317,7 +321,7 @@
                               subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString() + "." + (s + 1).toString();
                             }
                             else if (segment.substring(0, 3) == "MSH") {
-                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+2).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
                             }
                             else {
                               subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
@@ -336,7 +340,7 @@
                 findSegInfo = 76;
               }
               if (segment.substring(0, 3) == "MSH") {
-                column1.innerHTML = segment.substring(0, 3) + "." + (x+2).toString();
+                column1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString();
               }
               else {
                 column1.innerHTML = segment.substring(0, 3) + "." + (x).toString();
@@ -355,12 +359,7 @@
         TotalTree.appendChild(hugeTree);
       }
       document.getElementById("trythis").appendChild(TotalTree);
-      //for (var i=0; i<12; i++){
-      //document.getElementById(seglookup[i]).style.display= "none";
-      //}
-      //for (var i=0; i<numberOfLineBreaks+1; i++){
-      //document.getElementById(seglookup[i]).style.display= "block";
-      //}l
+      
       var acc = document.getElementsByClassName("accordion");
       var i;
       var accLength = acc.length;
@@ -431,7 +430,7 @@
         document.getElementById(y.toString() + "." + findId.toString()).setAttribute("style", "display: block; background-color: " +getColor.toString());
         y++;
       }
-      //EPPZScrollTo.scrollVerticalTickToPosition(window.pageYOffset, 455);
+      document.getElementById("HL7").value = formatedMessage[findId];
     }
 
     function searchMessages() {
@@ -479,6 +478,10 @@
       for(var d=0; d<thridShadeLength; d++){
         thridShade[d].style.backgroundColor = "";
       }
+      //document.getElementById("HL7").value = entireMessage;
+    }
+    function showOringinal(){
+      document.getElementById("HL7").value = document.getElementById("store").value;
     }
 
     var EPPZScrollTo = {
@@ -506,6 +509,7 @@
       <a href="javascript:searchMessages()" id="searchButton" class="btn btn-primary btn-lg pretty">Search</a>
       <textarea class="form-control" rows="1" cols="1" style="width: 150px" id="SearchField"></textarea>
       <a href="javascript:resetSearch()" id="reset" class="btn btn-primary btn-lg pretty" style="margin-left: 10px">Reset</a>
+      <a href="javascript:showOringinal()" id="whole" class="btn btn-primary btn-lg pretty" style="margin-left: 10px">Show Original</a>
       <p></p>
       <div id="trythis"></div>
   </body>
