@@ -565,12 +565,12 @@
             }
             var spacer = document.createElement("div");
             if(counter == 1){
-              /*var clipButton = document.createElement("button");
+              var clipButton = document.createElement("button");
               clipButton.setAttribute("onClick","copyToClip()");
               clipButton.setAttribute("id","clipboardButton");
               clipButton.setAttribute("class","btn btn-primary btn-lg pretty");
               clipButton.innerHTML = "Copy results to clipboard";
-              document.getElementById("pageBreak").appendChild(clipButton);*/
+              document.getElementById("pageBreak").appendChild(clipButton);
               spacer.setAttribute("class", "spacer1 compareElement");
             }else{
               spacer.setAttribute("class", "spacer compareElement");
@@ -594,10 +594,7 @@
       for(var x=0; x<elementsToCopyLength; x++){
         clipboardCopy += elementsToCopy[x].firstChild.firstChild.nextElementSibling.nextElementSibling.innerHTML.toString() + "\n";
       }
-      
     }
-
-  }
 
     var EPPZScrollTo = {
       scrollVerticalTickToPosition: function(currentPosition, targetPosition) {
