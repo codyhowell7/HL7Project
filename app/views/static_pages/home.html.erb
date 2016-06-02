@@ -94,6 +94,7 @@
     var formatedMessage = [];
     var multMessageLoop;
     function parse() {
+      internalClear();
       formatedMessage = [];
       document.getElementById("store").value = document.getElementById("HL7").value;
       while (document.getElementById("trythis").firstChild) {
@@ -156,33 +157,51 @@
         var subsubSeperator = fullmessage.substring(7, 8);
         var nextHead = "";
         var segCounter = 2;
+        var sectionHeadStorage=[];
         for (var i = 1; i < numberOfLineBreaks + 2; i++) {
           var accordionTree = document.createDocumentFragment();
           var accordionCreate = document.createElement("button");
+          var accordionRow = document.createElement("span");
+          accordionRow.setAttribute("id","accordionRow"+i.toString());
+          accordionRow.setAttribute("class","row");
+          accordionCreate.appendChild(accordionRow);
           accordionTree.appendChild(accordionCreate);
           //accordionCreate.appendChild(panelCreate);
           hugeTree.appendChild(accordionTree);
           accordionCreate.setAttribute("class", "accordion");
           accordionCreate.setAttribute("id", (i).toString() + "." + multMessageLoop.toString());
-          accordionCreate.setAttribute("style", "display: none")
+          accordionCreate.setAttribute("style", "display: none");
           var pos = nextSeg.search(/\n/g);
           if (i == 1) {
             var sectionHead = nextSeg.substring(0, 3);
-            accordionCreate.innerHTML = sectionHead;
           }
           else {
             nextHead = sectionHead;
             var sectionHead = nextSeg.substring(0, 3);
           }
-         /* if (nextHead == sectionHead) {
-            document.getElementById((i - 1).toString() + "." + multMessageLoop.toString()).innerHTML = sectionHead + "   -----   |" + (segCounter - 1).toString() + "|";
-            document.getElementById(i.toString() + "." + multMessageLoop.toString()).innerHTML = sectionHead + "   -----   |" + segCounter.toString() + "|";
-            segCounter++;
+          sectionHeadStorage.push(sectionHead);
+          var sectionHeadCounter=0;
+          var sectionHeadStorageLength = sectionHeadStorage.length;
+          for(var z=0; z<sectionHeadStorageLength; z++){
+            if(sectionHeadStorage[z] == sectionHead){
+              sectionHeadCounter++;
+            }
           }
-          else */
-          //  segCounter = 2;
+          if(sectionHeadCounter == 2){
+            var backRotation = sectionHeadStorage.lastIndexOf(sectionHead)-sectionHeadStorage.indexOf(sectionHead)
+            var findAccordion = accordionCreate;
+            for(var backtrack=0; backtrack<backRotation+1; backtrack++){
+              findAccordion = findAccordion.previousSibling.previousSibling;
+              if(findAccordion.innerHTML == sectionHead){
+                findAccordion.innerHTML = sectionHead+" |1|";
+              }
+            }
+            accordionCreate.innerHTML = sectionHead+" |2|";
+          }else if(sectionHeadCounter != 1){
+            accordionCreate.innerHTML = sectionHead+" |"+sectionHeadCounter+"|";
+          }else{
             accordionCreate.innerHTML = sectionHead;
-         // }
+          }
           var panelCreate = document.createElement("div");
           panelCreate.setAttribute("class", "panel");
           panelCreate.setAttribute("id", (i.toString() + "text" + multMessageLoop.toString()));
@@ -193,7 +212,16 @@
           if (posSearch == -1) {
             posSearch = nextSeg.length;
           }
+          var accordionCreateLength = accordionCreate.innerHTML.length;
           var segment = enteredText.substring(0, posSearch).trim();
+          for(var format=0; format<(30-accordionCreateLength); format++){
+            accordionCreate.innerHTML+='&nbsp';
+          }
+          if(segment.length>130){
+            accordionCreate.innerHTML+=segment.substring(0,130);
+          }else{
+            accordionCreate.innerHTML+= segment;
+          }
           enteredText = enteredText.substring(posSearch).trim();
           //document.getElementById("title").innerHTML = enteredText;
           if (segment.substring(segment.length - 1, segment.length) != seperator) {
@@ -272,7 +300,7 @@
                       subDiv.appendChild(subColumn3);
                       subCont.appendChild(subDiv);
                       if (repeatingArray.length > 1) {
-                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString();
+                        subColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString();
                       }
                       else if (segment.substring(0, 3) == "MSH") {
                         subColumn1.innerHTML = segment.substring(0, 3) + "." + (x + 1).toString() + "." + (q + 1).toString();
@@ -318,7 +346,7 @@
                             subsubDiv.appendChild(subsubColumn3);
                             subsubCont.appendChild(subsubDiv);
                             if (repeatingArray.length > 1) {
-                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString() + "." + (s + 1).toString();
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "[" + r.toString() + "]" + "." + (q + 1).toString() + "." + (s + 1).toString();
                             }
                             else if (segment.substring(0, 3) == "MSH") {
                               subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
@@ -372,9 +400,12 @@
           var getID = this.getAttribute('id');
           var findClass = this.className;
           if (findClass == "accordion active") {
+            this.value = this.innerHTML;
+            this.innerHTML = this.innerHTML.substring(0,8).trim();
             EPPZScrollTo.scrollVerticalTickToPosition(window.pageYOffset, goal-2);
+          }else{
+            this.innerHTML = this.value;
           }
-
         }
       }
     }
@@ -412,16 +443,26 @@
       }
       return fullmessage;
     }
-
-    function showMessage(id) {
+    function internalClear(){
       var getColor = "";
-      var onScreen = document.querySelectorAll('*[style*="display: block"]');
+      var onScreen = document.querySelectorAll('*[style*="display: block"], *[class*="spacer"]');
       var onScreenLength = onScreen.length;
       for (var i = 0; i < onScreenLength; i++) {
-        onScreen[i].nextElementSibling.className = "panel";
-        getColor = onScreen[i].style.backgroundColor;
-        onScreen[i].style = "display: none; background-color: " + getColor.toString();
+        if(onScreen[i].tagName == "BUTTON"){
+          onScreen[i].nextElementSibling.className = "panel";
+          getColor = onScreen[i].style.backgroundColor;
+          onScreen[i].style = "display: none; background-color: " + getColor.toString();
+        }else if (onScreen[i].tagName == "DIV"){
+          onScreen[i].parentElement.removeChild(onScreen[i]);
+        }
       }
+      if(document.getElementById("clipboardButton") != null){
+        document.getElementById("clipboardButton").parentElement.removeChild(document.getElementById("clipboardButton"));
+      }
+    }
+    
+    function showMessage(id) {
+      internalClear();
       var y = 1;
       var findId = id.substring(id.lastIndexOf("e")+1, id.length);
       while (document.getElementById(y.toString() + "." + findId.toString()) != null) {
@@ -446,7 +487,9 @@
           var multiMessageId = "message" + findMessageId.substring(findMessageId.lastIndexOf(".")+1, findMessageId.length).toString();
           document.getElementById(multiMessageId).setAttribute("style", "border-bottom-style: solid; border-width: 3px; border-color: #ffff00; margin-top: 5px");
           var foundSearch = possibleSearchLoactions[locate].parentElement;
-          foundSearch.setAttribute("style","background-color: #ffff99");
+          if(foundSearch.firstChild.innerHTML.substring(0,7) != "Message"){
+            foundSearch.setAttribute("style","background-color: #ffff99");
+          }
           if(possibleSearchLoactions[locate].getAttribute('id').includes("sub")){
             var currentAttribute = foundSearch.parentElement.parentElement.parentElement.previousSibling.getAttribute("style");
             foundSearch.parentElement.parentElement.parentElement.previousSibling.setAttribute("style","background-color: #ffffb3; "+currentAttribute.toString());
@@ -483,6 +526,78 @@
     function showOringinal(){
       document.getElementById("HL7").value = document.getElementById("store").value;
     }
+    
+    function compareMessages(){
+      try{
+        internalClear();
+        var compareText = document.getElementById("CompareField").value;
+        var fieldNameList = document.querySelectorAll('*[class="col-xs-2"]');
+        var showCompare;
+        var uniqueList= [];
+        var counter = 1;
+        fieldNameListLength = fieldNameList.length;
+        for(var i=0; i<fieldNameListLength; i++){
+          if(compareText == fieldNameList[i].innerHTML){
+            showCompare = fieldNameList[i].parentElement.cloneNode(true);
+            var compareValue = showCompare.firstChild.nextElementSibling.nextElementSibling.innerHTML;
+            if(document.getElementById("UniqueValues").checked){
+              if(uniqueList.includes(compareValue)){
+                continue;
+              }else{
+                uniqueList.push(compareValue);
+              }
+            }
+            var messageID = showCompare.getAttribute("id");
+            if(compareText.length>6){
+              var segmentHeader = fieldNameList[i].parentElement.parentElement.parentElement.parentElement.previousSibling.innerHTML; 
+            }else{
+              var segmentHeader = fieldNameList[i].parentElement.parentElement.parentElement.previousSibling.innerHTML; 
+            }
+            //var segmentHeaderNumber = segmentHeader.substring(segmentHeader.indexOf("|")+1,segmentHeader.lastIndexOf("|"));
+            var messageNumber = messageID.substring(messageID.lastIndexOf(".")+1,messageID.length);
+            showCompare.setAttribute("id","compare"+i.toString());
+            showCompare.setAttribute("style", "height: 20px; background-color: #f2f2f2");
+            showCompare.firstChild.innerHTML = "Message "+(parseInt(messageNumber)+1).toString();
+            if(segmentHeader.substring(0,8).lastIndexOf("|") != -1){
+              showCompare.firstChild.nextElementSibling.innerHTML = segmentHeader.substring(0,9).trim().substring(0,segmentHeader.substring(0,8).lastIndexOf("|")+1);
+            }else{
+              showCompare.firstChild.nextElementSibling.innerHTML = segmentHeader.substring(0,3);
+            }
+            var spacer = document.createElement("div");
+            if(counter == 1){
+              /*var clipButton = document.createElement("button");
+              clipButton.setAttribute("onClick","copyToClip()");
+              clipButton.setAttribute("id","clipboardButton");
+              clipButton.setAttribute("class","btn btn-primary btn-lg pretty");
+              clipButton.innerHTML = "Copy results to clipboard";
+              document.getElementById("pageBreak").appendChild(clipButton);*/
+              spacer.setAttribute("class", "spacer1 compareElement");
+            }else{
+              spacer.setAttribute("class", "spacer compareElement");
+            }
+            spacer.setAttribute("id", "spacer"+counter.toString());
+            counter++;
+            document.getElementById("trythis").appendChild(spacer);
+            spacer.appendChild(showCompare);
+          }
+        }
+      }
+      catch(err){
+        alert(err.message);
+      }
+    }
+    function copyToClip(){
+      var elementsToCopy = document.getElementsByClassName("compareElement");
+      var copyValues = [];
+      var elementsToCopyLength = elementsToCopy.length;
+      var clipboardCopy="";
+      for(var x=0; x<elementsToCopyLength; x++){
+        clipboardCopy += elementsToCopy[x].firstChild.firstChild.nextElementSibling.nextElementSibling.innerHTML.toString() + "\n";
+      }
+      
+    }
+
+  }
 
     var EPPZScrollTo = {
       scrollVerticalTickToPosition: function(currentPosition, targetPosition) {
@@ -510,7 +625,10 @@
       <textarea class="form-control" rows="1" cols="1" style="width: 150px" id="SearchField"></textarea>
       <a href="javascript:resetSearch()" id="reset" class="btn btn-primary btn-lg pretty" style="margin-left: 10px">Reset</a>
       <a href="javascript:showOringinal()" id="whole" class="btn btn-primary btn-lg pretty" style="margin-left: 10px">Show Original</a>
-      <p></p>
+      <textarea class="form-control" row="1"  cols="1" style="width: 150px" id="CompareField"></textarea>
+      <a href="javascript:compareMessages()" id="compareButton" class="btn btn-primary btn-lg pretty" style="margin-left: 10px">Compare</a>
+      <input type="checkbox" id="UniqueValues" name="uniqueBox">Only show unique values</input>
+      <p id="pageBreak"></p>
       <div id="trythis"></div>
   </body>
   </div>
