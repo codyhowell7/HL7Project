@@ -491,7 +491,7 @@
       var possibleSearchLoactions = document.querySelectorAll('*[class="col-md-6"]');
       var possibleSearchLoactionsLength = possibleSearchLoactions.length;
       for(var locate=0; locate<possibleSearchLoactionsLength;locate++){
-        if(possibleSearchLoactions[locate].innerHTML.includes(searchText)){
+        if(possibleSearchLoactions[locate].innerHTML.toUpperCase().includes(searchText.toUpperCase())){
           var findMessageId = possibleSearchLoactions[locate].getAttribute("id");
           var multiMessageId = "message" + findMessageId.substring(findMessageId.lastIndexOf(".")+1, findMessageId.length).toString();
           document.getElementById(multiMessageId).setAttribute("style", "border-bottom-style: solid; border-width: 3px; border-color: #ffff00; margin-top: 5px");
