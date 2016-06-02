@@ -1,5 +1,6 @@
 <div id="leftsidespace" class="leftContainer"></div>
 <div id="leftRightSidespace" class="leftRightContainer"></div>
+<div id="rightSidespace"></div>
 <div id="maincont" class="container">
 <textarea rows="0" style="display: none" id="store"></textarea>
   <div id="title" class="center jumbotron">
@@ -387,6 +388,9 @@
         TotalTree.appendChild(hugeTree);
       }
       document.getElementById("trythis").appendChild(TotalTree);
+      if(multMessageLoop ==1 ){
+        showMessage('message0');
+      }
       
       var acc = document.getElementsByClassName("accordion");
       var i;
@@ -472,6 +476,11 @@
         y++;
       }
       document.getElementById("HL7").value = formatedMessage[findId];
+      populateSidebar();
+    }
+    
+    function populateSidebar(){
+      
     }
 
     function searchMessages() {
@@ -587,6 +596,9 @@
       }
     }
     function copyToClip(){
+      if(document.getElementById("hiddenCopy") != null){
+        document.getElementById("hiddenCopy").parentElement.removeChild(document.getElementById("hiddenCopy"));
+      }
       var elementsToCopy = document.getElementsByClassName("compareElement");
       var copyValues = [];
       var elementsToCopyLength = elementsToCopy.length;
@@ -594,6 +606,13 @@
       for(var x=0; x<elementsToCopyLength; x++){
         clipboardCopy += elementsToCopy[x].firstChild.firstChild.nextElementSibling.nextElementSibling.innerHTML.toString() + "\n";
       }
+      hiddenCopy = document.createElement("textarea");
+      hiddenCopy.setAttribute("id","hiddenCopy");
+      hiddenCopy.value = clipboardCopy;
+      document.getElementById("trythis").appendChild(hiddenCopy);
+      document.getElementById("hiddenCopy").select();
+      document.execCommand('copy');
+      document.getElementById("hiddenCopy").setAttribute("style","display: none");
     }
 
     var EPPZScrollTo = {
