@@ -218,7 +218,8 @@ div.mainContainer{
     float: center;
 }
 #buttonspace{
-  padding: 0 0px;
+  padding-left: 15px;
+  position: static;
 }
 #bottomPage{
   height: 50px;
@@ -269,7 +270,7 @@ button.pretty {
   height: 30px;
   box-sizing: border-box;
   min-height: 4vh;
-
+  width: 100%;
   border: 20px solid whitesmoke;
   background: $ocean;
 
