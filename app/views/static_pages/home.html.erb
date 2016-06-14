@@ -213,6 +213,8 @@
         var nextHead = "";
         var segCounter = 2;
         var sectionHeadStorage=[];
+        var fullPos = 3;
+        var posSearch = 0;
         for (var i = 1; i < numberOfLineBreaks + 2; i++) {
           var accordionTree = document.createDocumentFragment();
           var accordionCreate = document.createElement("button");
@@ -247,8 +249,8 @@
             var findAccordion = accordionCreate;
             for(var backtrack=0; backtrack<backRotation+1; backtrack++){
               findAccordion = findAccordion.previousSibling.previousSibling;
-              if(findAccordion.innerHTML == sectionHead){
-                findAccordion.innerHTML = sectionHead+" |1|";
+              if(findAccordion.innerHTML.substring(0,3) == sectionHead){
+                findAccordion.innerHTML = sectionHead+" |1|"+findAccordion.innerHTML.substring(27);
               }
             }
             accordionCreate.innerHTML = sectionHead+" |2|";
@@ -261,21 +263,21 @@
           panelCreate.setAttribute("class", "panel");
           panelCreate.setAttribute("id", (i.toString() + "text" + multMessageLoop.toString()));
           hugeTree.appendChild(panelCreate);
-
+          fullPos += posSearch;
           nextSeg = nextSeg.substring(pos + 1);
-          var posSearch = enteredText.search(/\n/g);
+          posSearch = enteredText.search(/\n/g);
           if (posSearch == -1) {
             posSearch = nextSeg.length;
           }
           var accordionCreateLength = accordionCreate.innerHTML.length;
           var segment = enteredText.substring(0, posSearch).trim();
           for(var format=0; format<(30-accordionCreateLength); format++){
-            accordionCreate.innerHTML+='&nbsp';
+            accordionCreate.innerHTML+="&nbsp";
           }
           if(window.innerWidth>1600){
             accordionCreate.innerHTML+=segment.substring(0,130);
           }else if(window.innerWidth<1000){
-            accordionCreate.innerHTML+=segment.substring(0,70);
+            accordionCreate.innerHTML+=segment.substring(0,65);
           }else{
             accordionCreate.innerHTML+= segment;
           }
@@ -307,6 +309,7 @@
               div.setAttribute("id", segment.substring(0, 3) + "dynamic" + (x+1).toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
               div.setAttribute("class", "row");
               div.setAttribute("style", "background-color: #f2f2f2");
+              //div.addEventListener("click", highlightClick(fullmessage, fullPos, x, SegArray[x].length,0,0,0, 1), false);
 
               column1.setAttribute("id", segment.substring(0, 3) + "col1row" + (x+1).toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
               column1.setAttribute("class", "col-xs-2");
@@ -344,6 +347,7 @@
                       subDiv.setAttribute("class", "row");
                       //subDiv.setAttribute("style", "border-style: inset");
                       subDiv.setAttribute("style", "background-color: #e6e6e6");
+                      //subDiv.addEventListener("click", highlightClick(fullmessage, fullPos, x, SegArray[x].length, q, r, subComponent[q].length, 2), false);
 
                       subColumn1.setAttribute("id", segment.substring(0, 3) + "subcol1row" + (x+1).toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                       subColumn1.setAttribute("class", "col-xs-2");
@@ -368,9 +372,11 @@
                       //document.getElementById(segment.substring(0,3)+"subcol2row"+x.toString()+"."+q.toString()+"."+segment.substring(4,5)).innerHTML = MSHdetail[x];
                       var subsubComponent = subComponent[q].split(subsubSeperator);
                       if (subsubComponent.length > 1) {
+                        column3.innerHTML = "--->";
                         subColumn3.innerHTML = "--->";
                       }
                       else {
+                        
                         subColumn3.innerHTML = subComponent[q];
                       }
                       if (subsubComponent.length > 1) {
@@ -390,6 +396,7 @@
                             subsubDiv.setAttribute("class", "row");
                             //subDiv.setAttribute("style", "border-style: inset");
                             subsubDiv.setAttribute("style", "background-color: #d9d9d9");
+                            //subsubDiv.addEventListener("click",highlightClick(subsubDiv.id,enteredText),false);
 
                             subsubColumn1.setAttribute("id", segment.substring(0, 3) + "subsubcol1row" + (x+1).toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                             subsubColumn1.setAttribute("class", "col-xs-2");
@@ -409,7 +416,7 @@
                               subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
                             }
                             else {
-                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
+                              subsubColumn1.innerHTML = segment.substring(0, 3) + "." + (x).toString() + "." + (q + 1).toString() + "." + (s + 1).toString();
                             }
                             //document.getElementById(segment.substring(0,3)+"subcol2row"+x.toString()+"."+q.toString()+"."+segment.substring(4,5)).innerHTML = MSHdetail[x];
                             subsubColumn3.innerHTML = subsubComponent[s];
@@ -434,6 +441,20 @@
                 column3.innerHTML = SegArray[x];
               } 
               else {
+                /*var subAccordian = document.createElement("button");
+                subAccordian.setAttribute("class", "accordion row");
+                subAccordian.setAttribute("id","subAccordian");
+                subAccordian.setAttribute("style", "padding: 3px; margin-left: 0px; margin-bottom: 0px; background-color: #f2f2f2");
+                var formatSpan = document.createElement("span");
+                var copyDiv = div.cloneNode(true);
+                formatSpan.appendChild(copyDiv);
+                subAccordian.appendChild(formatSpan);
+                var oldChild = div;
+                var parentNode = main;
+                parentNode.replaceChild(subAccordian, oldChild); //TODO
+                var subPanel = subAccordian.nextElementSibling;
+                var subPanelClass = subPanel.getAttribute("class");
+                subPanel.setAttribute("class","panel "+ subPanelClass);*/
                 column3.innerHTML = "--->";
               }
               column2.innerHTML = detail[findSegInfo][x-1];
@@ -459,9 +480,12 @@
           var goal = rect.top + window.pageYOffset;
           var getID = this.getAttribute('id');
           var findClass = this.className;
-          if (findClass == "accordion active") {
+          if (findClass == "accordion active" && getID != "subAccordian") {
             this.value = this.innerHTML;
             this.innerHTML = this.innerHTML.substring(0,8).trim();
+            if(this.innerHTML.substring(7,8) == '&'){
+              this.innerHTML = this.innerHTML.substring(0,7);
+            }
             EPPZScrollTo.scrollVerticalTickToPosition(window.pageYOffset, goal-2);
           }else{
             this.innerHTML = this.value;
@@ -469,7 +493,52 @@
         }
       }
     }
-
+    function escapeSequence(Message){
+      /*var values = document.querySelectorAll('*[class="col-md-6"]');
+      var valuesLength  = value.length;
+      for(var i=0; i<valuesLength; i++){
+        values[i] = values[i].replace(/\\E\\/g, '\\');
+        values[i] = values[i].replace(/\\F\\/g, '|');
+        values[i] = values[i].replace(/\\R\\/g, '~');
+        values[i] = values[i].replace(/\\S\\/g, '^');
+        values[i] = values[i].replace(/\\T\\/g, '&');
+        values[i] = values[i].replace(/\\X0A\\/g, '\n');
+        values[i] = values[i].replace(/\\X0D\\/g, '\n');
+        values[i] = values[i].replace(/\\.br\\\g, '\n');*/
+        return Message;
+    }
+    /*var highlightClick = function getMessage(message, index, outerloop, valueLength, subloop, repeatloop, subLength, identifier){
+      return function(event){
+        var finalIndex = findIndex(message, index, outerloop, subloop, repeatloop, identifier);
+        //document.getElementById("HL7").value = message.substring(0,index)+'<span class="highlight">' +message.substring(finalIndex,finalIndex+valueLength)+'</span>'+message.substring(finalIndex+valueLength);
+        document.getElementById("HL7").focus();
+        if (identifier == 1){
+          document.getElementById("HL7").setSelectionRange(finalIndex, finalIndex+valueLength);
+        }else{
+          document.getElementById("HL7").setSelectionRange(finalIndex, finalIndex+subLength);
+        }
+      };
+    };
+    
+    function findIndex(full, startIndex, loops, subloop, repeatloop, identifier){
+      var segmentToFind = full.substring(startIndex);
+      var finalIndex = startIndex;
+      var segmentArray = segmentToFind.split("|");
+      var subSegmentArray = [];
+      for(var i=0; i<loops; i++){
+          for(var y=0; y<=subloop; y++){
+              if(identifier > 1 && i==(loops-1)){
+                  if(subloop > 0){
+                    subSegmentArray = segmentArray[i+1].split("^");
+                    finalIndex +=subSegmentArray[y].length+1;
+                }
+              }
+          }
+            finalIndex += segmentArray[i].length+1;
+      }
+      return finalIndex;
+    }*/
+    
     function split(fullmessage) {
       var enteredText = fullmessage;
       var detailLookupLength = detailLookup.length;
@@ -635,6 +704,9 @@
               clipButton.setAttribute("id","clipboardButton");
               clipButton.setAttribute("class","btn btn-primary btn-lg pretty");
               clipButton.innerHTML = "Copy results to clipboard";
+              if(window.innerWidth < 1000){
+                clipButton.setAttribute("style","margin-left: 210px")
+              }
               document.getElementById("pageBreak").appendChild(clipButton);
               spacer.setAttribute("class", "spacer1 compareElement");
             }else{
