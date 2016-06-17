@@ -181,10 +181,11 @@ div.row{
 
 
 div.subContainer{
-  padding: 0 35px;
+  padding-left: 35px;
   border-top-style: solid;
   border-color: white;
   border-width: 2px;
+  display: none;
 }
 div.leftContainer{
     text-align: left;

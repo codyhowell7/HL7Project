@@ -347,6 +347,7 @@
                       subDiv.setAttribute("class", "row");
                       //subDiv.setAttribute("style", "border-style: inset");
                       subDiv.setAttribute("style", "background-color: #e6e6e6");
+                      subDiv.style.marginRight = '-20px';
                       //subDiv.addEventListener("click", highlightClick(fullmessage, fullPos, x, SegArray[x].length, q, r, subComponent[q].length, 2), false);
 
                       subColumn1.setAttribute("id", segment.substring(0, 3) + "subcol1row" + (x+1).toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
@@ -372,8 +373,22 @@
                       //document.getElementById(segment.substring(0,3)+"subcol2row"+x.toString()+"."+q.toString()+"."+segment.substring(4,5)).innerHTML = MSHdetail[x];
                       var subsubComponent = subComponent[q].split(subsubSeperator);
                       if (subsubComponent.length > 1) {
-                        column3.innerHTML = "--->";
-                        subColumn3.innerHTML = "--->";
+                        //column3.innerHTML = "--->";
+                        //subColumn3.innerHTML = "--->";
+                        
+                        subColumn3.innerHTML = subComponent[q].substring(0,20);
+                        var after = document.createElement("div");
+                        subDiv.addEventListener("click", miniAccordian(subDiv, after, subDiv.firstChild.nextElementSibling.nextElementSibling));
+                        after.setAttribute("id","plusminus")
+                        after.setAttribute("class","col-xs-1");
+                        after.style.float = 'right';
+                        if(window.innerWidth<1000){
+                          after.style.paddingLeft = '32px';
+                        }else{
+                          after.style.paddingLeft = '67px';
+                        }
+                        after.innerHTML = "+";
+                        subDiv.appendChild(after);
                       }
                       else {
                         
@@ -396,6 +411,7 @@
                             subsubDiv.setAttribute("class", "row");
                             //subDiv.setAttribute("style", "border-style: inset");
                             subsubDiv.setAttribute("style", "background-color: #d9d9d9");
+                            subsubDiv.style.marginRight = '-20px';
                             //subsubDiv.addEventListener("click",highlightClick(subsubDiv.id,enteredText),false);
 
                             subsubColumn1.setAttribute("id", segment.substring(0, 3) + "subsubcol1row" + (x+1).toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
