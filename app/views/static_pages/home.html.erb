@@ -513,11 +513,11 @@
         if(subPanel.style.display == "block"){
           subPanel.style.display = "none";
           afterToggle.innerHTML = '+';
-          changeValue.innerHTML = changeValue.value;
+          changeValue.innerHTML = changeValue.title;
         }else{
           subPanel.style.display = "block";
           afterToggle.innerHTML = '-';
-          changeValue.value = changeValue.innerHTML;
+          changeValue.title = changeValue.innerHTML;
           changeValue.innerHTML = "--->";
           
         }
@@ -718,7 +718,14 @@
         for(var i=0; i<fieldNameListLength; i++){
           if(compareText == fieldNameList[i].innerHTML){
             showCompare = fieldNameList[i].parentElement.cloneNode(true);
+            if(showCompare.firstChild.nextElementSibling.nextElementSibling.nextElementSibling){
+              showCompare.firstChild.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = '';
+            }
             var compareValue = showCompare.firstChild.nextElementSibling.nextElementSibling.innerHTML;
+            if(compareValue == '---&gt;'){
+              compareValue = showCompare.firstChild.nextElementSibling.nextElementSibling.title;
+              showCompare.firstChild.nextElementSibling.nextElementSibling.innerHTML = showCompare.firstChild.nextElementSibling.nextElementSibling.title;
+            }
             if(document.getElementById("UniqueValues").checked){
               if(uniqueList.includes(compareValue)){
                 continue;
