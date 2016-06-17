@@ -644,7 +644,7 @@
       if(searchText == ""){
         return;
       }
-      var possibleSearchLoactions = document.querySelectorAll('*[class="col-md-6"]');
+      var possibleSearchLoactions = document.querySelectorAll('*[class="col-sm-5"]');
       var possibleSearchLoactionsLength = possibleSearchLoactions.length;
       for(var locate=0; locate<possibleSearchLoactionsLength;locate++){
         if(possibleSearchLoactions[locate].innerHTML.toUpperCase().includes(searchText.toUpperCase())){
