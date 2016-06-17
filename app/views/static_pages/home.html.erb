@@ -316,7 +316,7 @@
               column2.setAttribute("id", segment.substring(0, 3) + "col2row" + (x+1).toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
               column2.setAttribute("class", "col-sm-4");
               column3.setAttribute("id", segment.substring(0, 3) + "col3row" + (x+1).toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
-              column3.setAttribute("class", "col-md-6");
+              column3.setAttribute("class", "col-sm-5");
 
               tree.appendChild(div);
               div.appendChild(column1);
@@ -354,7 +354,7 @@
                       subColumn2.setAttribute("id", segment.substring(0, 3) + "subcol2row" + (x+1).toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                       subColumn2.setAttribute("class", "col-sm-4");
                       subColumn3.setAttribute("id", segment.substring(0, 3) + "subcol3row" + (x+1).toString() + "." + q.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
-                      subColumn3.setAttribute("class", "col-md-6");
+                      subColumn3.setAttribute("class", "col-sm-5");
 
                       subDiv.appendChild(subColumn1);
                       subDiv.appendChild(subColumn2);
@@ -403,7 +403,7 @@
                             subsubColumn2.setAttribute("id", segment.substring(0, 3) + "subsubcol2row" + (x+1).toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
                             subsubColumn2.setAttribute("class", "col-sm-4");
                             subsubColumn3.setAttribute("id", segment.substring(0, 3) + "subsubcol3row" + (x+1).toString() + "." + q.toString() + s.toString() + "." + uniqueSeperator.toString() + r.toString() + "." + multMessageLoop.toString());
-                            subsubColumn3.setAttribute("class", "col-md-6");
+                            subsubColumn3.setAttribute("class", "col-sm-5");
 
                             subsubDiv.appendChild(subsubColumn1);
                             subsubDiv.appendChild(subsubColumn2);
@@ -438,24 +438,22 @@
                 column1.innerHTML = segment.substring(0, 3) + "." + (x).toString();
               }
               if (subComponent.length == 1) {
-                column3.innerHTML = SegArray[x];
+                column3.innerHTML = SegArray[x].substring(0,50);
               } 
               else {
-                /*var subAccordian = document.createElement("button");
-                subAccordian.setAttribute("class", "accordion row");
-                subAccordian.setAttribute("id","subAccordian");
-                subAccordian.setAttribute("style", "padding: 3px; margin-left: 0px; margin-bottom: 0px; background-color: #f2f2f2");
-                var formatSpan = document.createElement("span");
-                var copyDiv = div.cloneNode(true);
-                formatSpan.appendChild(copyDiv);
-                subAccordian.appendChild(formatSpan);
-                var oldChild = div;
-                var parentNode = main;
-                parentNode.replaceChild(subAccordian, oldChild); //TODO
-                var subPanel = subAccordian.nextElementSibling;
-                var subPanelClass = subPanel.getAttribute("class");
-                subPanel.setAttribute("class","panel "+ subPanelClass);*/
-                column3.innerHTML = "--->";
+                column3.innerHTML = SegArray[x].substring(0,35);
+                var after = document.createElement("div");
+                div.addEventListener("click", miniAccordian(div, after, div.firstChild.nextElementSibling.nextElementSibling));
+                after.setAttribute("id","plusminus")
+                after.setAttribute("class","col-xs-1");
+                after.style.float = 'right';
+                if(window.innerWidth<1000){
+                  after.style.paddingLeft = '20px';
+                }else{
+                  after.style.paddingLeft = '55px';
+                }
+                after.innerHTML = "+";
+                div.appendChild(after);
               }
               column2.innerHTML = detail[findSegInfo][x-1];
             }
@@ -493,6 +491,23 @@
         }
       }
     }
+    var miniAccordian = function(element, afterToggle, changeValue){
+      return function(event){
+        var subPanel = element.nextElementSibling;
+        if(subPanel.style.display == "block"){
+          subPanel.style.display = "none";
+          afterToggle.innerHTML = '+';
+          changeValue.innerHTML = changeValue.value;
+        }else{
+          subPanel.style.display = "block";
+          afterToggle.innerHTML = '-';
+          changeValue.value = changeValue.innerHTML;
+          changeValue.innerHTML = "--->";
+          
+        }
+      };
+    };
+    
     function escapeSequence(Message){
       /*var values = document.querySelectorAll('*[class="col-md-6"]');
       var valuesLength  = value.length;
@@ -624,7 +639,10 @@
           if(foundSearch.firstChild.innerHTML.substring(0,7) != "Message"){
             foundSearch.setAttribute("style","background-color: #ffff99");
           }
-          if(possibleSearchLoactions[locate].getAttribute('id').includes("sub")){
+          if(possibleSearchLoactions[locate].getAttribute('id').includes("subsub")){
+            var currentAttribute = foundSearch.parentElement.parentElement.parentElement.parentElement.previousSibling.getAttribute("style");
+            foundSearch.parentElement.parentElement.parentElement.parentElement.previousSibling.setAttribute("style","background-color: #ffffb3; "+currentAttribute.toString());
+          }else if(possibleSearchLoactions[locate].getAttribute('id').includes("sub")){
             var currentAttribute = foundSearch.parentElement.parentElement.parentElement.previousSibling.getAttribute("style");
             foundSearch.parentElement.parentElement.parentElement.previousSibling.setAttribute("style","background-color: #ffffb3; "+currentAttribute.toString());
           }else{
@@ -641,11 +659,11 @@
       var multiMessageButtons = document.querySelectorAll('*[onclick*="showMessage"]');
       var firstShadeLength = firstShade.length;
       for(var a=0; a<firstShadeLength; a++){
-        firstShade[a].style.backgroundColor = "";
+        resetColor(firstShade[a]);
       }
       var secondShadeLength = secondShade.length;
       for(var b=0; b<secondShadeLength; b++){
-        secondShade[b].style.backgroundColor = "";
+        resetColor(secondShade[b]);
       }
       var multiMessageButtonsLength = multiMessageButtons.length;
       for(var c=0; c<multiMessageButtonsLength; c++){
@@ -653,10 +671,21 @@
       }
       var thridShadeLength = thridShade.length;
       for(var d=0; d<thridShadeLength; d++){
-        thridShade[d].style.backgroundColor = "";
+        resetColor(thridShade[d]);
       }
       //document.getElementById("HL7").value = entireMessage;
     }
+    
+    function resetColor(infoRow){
+      if(infoRow.id.includes('subsub')){
+        infoRow.style.backgroundColor = "#d9d9d9"; 
+      }else if (infoRow.id.includes('sub')){
+        infoRow.style.backgroundColor = "#e6e6e6"; 
+      }else{
+        infoRow.style.backgroundColor = "#f2f2f2";
+      }
+    }
+    
     function showOringinal(){
       document.getElementById("HL7").value = document.getElementById("store").value;
     }

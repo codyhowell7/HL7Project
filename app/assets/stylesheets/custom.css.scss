@@ -129,6 +129,7 @@ div.coolcontainer{
   border-top-style: solid;
   border-color: white;
   border-width: 1px;
+  display: none;
 }
 
 /* Style the accordion panel. Note: hidden by default */
@@ -142,6 +143,7 @@ div.panel {
 div.panel.show {
     display: block !important;
 }
+
 
 button.accordion:after {
     content: '\02795'; /* Unicode character for "plus" sign (+) */
@@ -176,6 +178,8 @@ div.row{
   margin-left: 0px;
   height: 22px;
 }
+
+
 div.subContainer{
   padding: 0 35px;
   border-top-style: solid;
