@@ -330,8 +330,8 @@
                 var subComponent = repeatingArray[r].split(subSeperator);
                 if (subComponent.length > 1) {
                   var subCont = document.createElement("div");
-                  subCont.setAttribute("id", (x+1).toString() + segment.substring(0, 3) + "subDynamicRow" + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
-                  subCont.setAttribute("class", "coolcontainer");
+                  subCont.setAttribute("id", (x+1).toString() + segment.substring(0, 3) + "subDynamicRow" + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString()+"."+r.toString());
+                  subCont.setAttribute("class", "coolcontainer repeating"+x.toString()+"."+segment.substring(0, 3)+"."+uniqueSeperator.toString() + "." + multMessageLoop.toString());
                   main.appendChild(subCont);
                   var prettySubRow = 0;
                   var subComponentLength = subComponent.length;
@@ -343,7 +343,7 @@
                       var subColumn2 = document.createElement("div");
                       var subColumn3 = document.createElement("div");
 
-                      subDiv.setAttribute("id", "subDynamic" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString());
+                      subDiv.setAttribute("id", "subDynamic" + x.toString() + "." + q.toString() + "." + uniqueSeperator.toString() + "." + multMessageLoop.toString()+"."+r.toString());
                       subDiv.setAttribute("class", "row");
                       //subDiv.setAttribute("style", "border-style: inset");
                       subDiv.setAttribute("style", "background-color: #e6e6e6");
@@ -377,18 +377,18 @@
                         //subColumn3.innerHTML = "--->";
                         
                         subColumn3.innerHTML = subComponent[q].substring(0,20);
-                        var after = document.createElement("div");
+                        var subafter = document.createElement("div");
                         subDiv.addEventListener("click", miniAccordian(subDiv, after, subDiv.firstChild.nextElementSibling.nextElementSibling));
-                        after.setAttribute("id","plusminus")
-                        after.setAttribute("class","col-xs-1");
-                        after.style.float = 'right';
+                        subafter.setAttribute("id","plusminus")
+                        subafter.setAttribute("class","col-xs-1");
+                        subafter.style.float = 'right';
                         if(window.innerWidth<1000){
-                          after.style.paddingLeft = '32px';
+                          subafter.style.paddingLeft = '32px';
                         }else{
-                          after.style.paddingLeft = '67px';
+                          subafter.style.paddingLeft = '67px';
                         }
-                        after.innerHTML = "+";
-                        subDiv.appendChild(after);
+                        subafter.innerHTML = "+";
+                        subDiv.appendChild(subafter);
                       }
                       else {
                         
@@ -460,6 +460,7 @@
                 column3.innerHTML = SegArray[x].substring(0,35);
                 var after = document.createElement("div");
                 div.addEventListener("click", miniAccordian(div, after, div.firstChild.nextElementSibling.nextElementSibling));
+                //messageButton.onclick += "; miniAccordian(div, after, div.firstChild.nextElementSibling.nextElementSibling)";
                 after.setAttribute("id","plusminus")
                 after.setAttribute("class","col-xs-1");
                 after.style.float = 'right';
@@ -510,16 +511,19 @@
     var miniAccordian = function(element, afterToggle, changeValue){
       return function(event){
         var subPanel = element.nextElementSibling;
-        if(subPanel.style.display == "block"){
-          subPanel.style.display = "none";
-          afterToggle.innerHTML = '+';
-          changeValue.innerHTML = changeValue.title;
-        }else{
-          subPanel.style.display = "block";
-          afterToggle.innerHTML = '-';
-          changeValue.title = changeValue.innerHTML;
-          changeValue.innerHTML = "--->";
-          
+        var subPanelClass = subPanel.getAttribute("class");
+        var subPanels = document.getElementsByClassName(subPanelClass);
+        for(var i=0; i<subPanels.length; i++){
+          if(subPanels[i].style.display == "block"){
+            subPanels[i].style.display = "none";
+            afterToggle.innerHTML = '+';
+            changeValue.innerHTML = changeValue.title;
+          }else{
+            subPanels[i].style.display = "block";
+            afterToggle.innerHTML = '-';
+            changeValue.title = changeValue.innerHTML;
+            changeValue.innerHTML = "--->";
+          }
         }
       };
     };
@@ -538,8 +542,9 @@
         values[i] = values[i].replace(/\\.br\\\g, '\n');*/
         return Message;
     }
-    /*var highlightClick = function getMessage(message, index, outerloop, valueLength, subloop, repeatloop, subLength, identifier){
-      return function(event){
+    var highlightClick = function getMessage(message, index, outerloop, valueLength, subloop, repeatloop, subLength, identifier){
+      //return function(event){
+      /*
         var finalIndex = findIndex(message, index, outerloop, subloop, repeatloop, identifier);
         //document.getElementById("HL7").value = message.substring(0,index)+'<span class="highlight">' +message.substring(finalIndex,finalIndex+valueLength)+'</span>'+message.substring(finalIndex+valueLength);
         document.getElementById("HL7").focus();
@@ -549,7 +554,7 @@
           document.getElementById("HL7").setSelectionRange(finalIndex, finalIndex+subLength);
         }
       };
-    };
+    }
     
     function findIndex(full, startIndex, loops, subloop, repeatloop, identifier){
       var segmentToFind = full.substring(startIndex);
@@ -567,8 +572,8 @@
           }
             finalIndex += segmentArray[i].length+1;
       }
-      return finalIndex;
-    }*/
+      return finalIndex;*/
+    }
     
     function split(fullmessage) {
       var enteredText = fullmessage;
@@ -776,9 +781,6 @@
       }
     }
     function copyToClip(){
-      if(document.getElementById("hiddenCopy") != null){
-        document.getElementById("hiddenCopy").parentElement.removeChild(document.getElementById("hiddenCopy"));
-      }
       var elementsToCopy = document.getElementsByClassName("compareElement");
       var copyValues = [];
       var elementsToCopyLength = elementsToCopy.length;
@@ -790,9 +792,9 @@
       hiddenCopy.setAttribute("id","hiddenCopy");
       hiddenCopy.value = clipboardCopy;
       document.getElementById("trythis").appendChild(hiddenCopy);
-      document.getElementById("hiddenCopy").select();
+      hiddenCopy.select();
       document.execCommand('copy');
-      document.getElementById("hiddenCopy").setAttribute("style","display: none");
+      hiddenCopy.parentElement.removeChild(document.getElementById("hiddenCopy"));
     }
 
     var EPPZScrollTo = {
