@@ -513,16 +513,36 @@
         var subPanel = element.nextElementSibling;
         var subPanelClass = subPanel.getAttribute("class");
         var subPanels = document.getElementsByClassName(subPanelClass);
-        for(var i=0; i<subPanels.length; i++){
+        var subPanelsLength = subPanels.length;
+        for(var i=0; i<subPanelsLength; i++){
+          var pass = true;
           if(subPanels[i].style.display == "block"){
             subPanels[i].style.display = "none";
             afterToggle.innerHTML = '+';
-            changeValue.innerHTML = changeValue.title;
+            var classLength = subPanels[i].previousElementSibling.classList.length;
+            for(var x=0; x<classLength; x++){
+              if (subPanels[i].previousElementSibling.classList[x] == "coolcontainer"){
+                pass = false;
+              }
+            }
+            if (pass){
+              subPanels[i].previousElementSibling.setAttribute("class","miniAccordianOff row");
+              changeValue.innerHTML = changeValue.title;
+            }
           }else{
             subPanels[i].style.display = "block";
             afterToggle.innerHTML = '-';
-            changeValue.title = changeValue.innerHTML;
-            changeValue.innerHTML = "--->";
+            var classLength = subPanels[i].previousElementSibling.classList.length;
+            for(var x=0; x<classLength; x++){
+              if (subPanels[i].previousElementSibling.classList[x] == "coolcontainer"){
+                pass = false;
+              }
+            }
+            if (pass){
+              subPanels[i].previousElementSibling.setAttribute("class","miniAccordianOn row");
+              changeValue.title = changeValue.innerHTML;
+              changeValue.innerHTML = "--->";
+            }     
           }
         }
       };
@@ -609,6 +629,19 @@
       return fullmessage;
     }
     function internalClear(){
+      var onPanel = document.getElementsByClassName("miniAccordianOn");
+      for(var x=0; x<onPanel.length; x++){
+        onPanel[x].lastChild.innerHTML = '+';
+        onPanel[x].firstChild.nextElementSibling.nextElementSibling.innerHTML = onPanel[x].firstChild.nextElementSibling.nextElementSibling.title
+        var fullPanel = document.getElementsByClassName(onPanel[x].nextElementSibling.getAttribute("class"));
+        for(var y=0; y<fullPanel.length; y++){
+          fullPanel[y].style.display = "none";
+        }
+      }
+      var onAccordion = document.getElementsByClassName("accordion active");
+      for(var k=0; k<onAccordion.length; k++){
+        onAccordion[k].innerHTML = onAccordion[k].value;
+      }
       var getColor = "";
       var onScreen = document.querySelectorAll('*[style*="display: block"], *[class*="spacer"]');
       var onScreenLength = onScreen.length;
