@@ -196,6 +196,10 @@ div.leftContainer{
     float: left;
 }
 
+div.leftContainer::-webkit-scrollbar{
+  width: 1em;
+}
+
 div.leftRightContainer{
     text-align: left;
     border: none;
