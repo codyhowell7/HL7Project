@@ -57,7 +57,7 @@
 <div id="bottomPage"></div>
   <script type="text/javascript">
     document.getElementById("centerCont").appendChild(document.getElementById("buttonspace"));
-    var detailLookup = ["MSH", "EVN", "ACC", "ADD", "AIG", "AIL", "AIP", "AIS", "AL1", "APR", "ARQ", "AUT", "BLG", "CDM", "CM0", "CM1", "CM2", "CSP", "CSR", "CSS", "CTD", "CTI", "DB1", "DG1", "DRG", "DSC", "DSP", "EQL", "ERQ", "ERR", "FAC", "FT1", "GOL", "GT1", "IAM", "IN1", "IN2", "IN3", "LCC", "LCH", "LDP", "LOC", "LRL", "MFA", "MFE", "MFI", "MRG", "MSA", "NK1", "NSC", "NST", "NTE", "OBR", "OBX", "ODS", "ODT", "OM1", "OM2", "OM3", "OM4", "OM5", "OM6", "PCR", "PD1", "PDC", "PEO", "PES", "PID", "PR1", "PRA", "PRB", "PV1", "ORC", "PV2", "SCH", "RGS"];
+    var detailLookup = ["MSH", "EVN", "ACC", "ADD", "AIG", "AIL", "AIP", "AIS", "AL1", "APR", "ARQ", "AUT", "BLG", "CDM", "CM0", "CM1", "CM2", "CSP", "CSR", "CSS", "CTD", "CTI", "DB1", "DG1", "DRG", "DSC", "DSP", "EQL", "ERQ", "ERR", "FAC", "FT1", "GOL", "GT1", "IAM", "IN1", "IN2", "IN3", "LCC", "LCH", "LDP", "LOC", "LRL", "MFA", "MFE", "MFI", "MRG", "MSA", "NK1", "NSC", "NST", "NTE", "OBR", "OBX", "ODS", "ODT", "OM1", "OM2", "OM3", "OM4", "OM5", "OM6", "PCR", "PD1", "PDC", "PEO", "PES", "PID", "PR1", "PRA", "PRB", "PV1", "ORC", "PV2", "SCH", "RGS", "STF"];
     var detail = new Array();
     detail[0] = new Array("Encoding Characters", "Sending Application", "Sending Facility", "Receiving Application", "Receiving Facility", "Date/Time Of Message", "Security", "Message Type", "Message Control ID", "Processing ID", "Version ID", "Sequence Number", "Continuation Pointer", "Accept Acknowledgment Type", "Application Acknowledgment Type", "Country Code", "Character Set", "Principal Language Of Message");
     detail[1] = new Array("Event Type Code", "Recorded Date/Time", "Date/Time Planned Event", "Event Reason Code", "Operator ID", "Event Occurred");
@@ -135,7 +135,8 @@
     detail[73] = new Array("Prior Pending Location", "Accommodation Code", "Admit Reason", "Transfer Reason", "Patient Valuables", "Patient Valuables Location", "Visit User Code", "Expected Admit Date/Time", "Expected Discharge Date/Time", "Estimated Length of Inpatient Stay", "Actual Length of Inpatient Stay", "Visit Description", "Referral Source Code", "Previous Service Date", "Employment Illness Related Indicator", "Purge Status Code", "Purge Status Date", "Special Program Code", "Retention Indicator", "Expected Number of Insurance Plans", "Visit Publicity Code", "Visit Protection Indicator", "Clinic Organization Name", "Patient Status Code", "Visit Priority Code", "Previous Treatment Date", "Expected Discharge Disposition", "Signature on File Date", "First Similar Illness Date", "Patient Charge Adjustment Code", "Recurring Service Code", "Billing Media Code", "Expected Surgery Date & Time", "Military Partnership Code", "Military Non-Availability Code", "Newborn Baby Indicator", "Baby Detained Indicator");
     detail[74] = new Array("Placer Appointment ID", "Filler Appointment ID", "Occurrence Number", "Placer Group Number", "Schedule ID", "Event Reason", "Appointment Reason", "Appointment Type", "Appointment Duration", "Appointment Duration Units", "Appointment Timing Quantity", "Placer Contact Person", "Placer Contact Phone Number", "Placer Contact Address", "Placer Contact Location", "Filler Contact Person", "Filler Contact Phone Number", "Filler Contact Address", "Filler Contact Location", "Entered by Person", "Entered by Phone Number", "Entered by Location", "Parent Placer Appointment ID", "Parent Filler Appointment ID", "Filler Status Code");
     detail[75] = new Array("Set ID - RGS", "Segment Action Code", "Resource Group ID");
-    detail[76] = new Array("????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????");
+    detail[77] = new Array("????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????","????", "????", "????");
+    detail[76] = new Array("STF - Primary Key Value","Staff ID Code","Staff Name","Staff Type","Sex","Date of Birth","Active/Inactive Flag","Department","Service","Phone","Office/Home Address","Activation Date","Inactivation Date","Backup Person ID","E-mail Address","Preferred Method of Contact","Marital Status","Job Title","Job Code/Class","Employment Status","Additional Insured on Auto","Driver's License Number","Copy Auto Ins","Auto Ins. Expires","Date Last DMV Review","Date Next DMV Review");
     
     var formatedMessage = [];
     var multMessageLoop;
@@ -274,8 +275,14 @@
           for(var format=0; format<(30-accordionCreateLength); format++){
             accordionCreate.innerHTML+="&nbsp";
           }
+          if(segment.substring(0,3).toUpperCase().includes("I")){
+            accordionCreate.innerHTML+="&nbsp";
+          }
+          if(segment.substring(0,3).toUpperCase().includes("1")){
+            accordionCreate.innerHTML+="&nbsp";
+          }
           if(window.innerWidth>1600){
-            accordionCreate.innerHTML+=segment.substring(0,130);
+            accordionCreate.innerHTML+=segment.substring(0,125);
           }else if(window.innerWidth<1000){
             accordionCreate.innerHTML+=segment.substring(0,65);
           }else{
@@ -299,7 +306,7 @@
             if(x == 0){
               continue;
             }
-            if (SegArray[x] != "") {
+            if (SegArray[x] != "" && SegArray[x] != /\^+/g.exec(SegArray[x].toString())) {
               prettyRow++;
               var tree = document.createDocumentFragment();
               var div = document.createElement("div");
@@ -337,7 +344,6 @@
                   var subComponentLength = subComponent.length;
                   for (var q = 0; q < subComponentLength; q++) {
                     if (subComponent[q] != "") {
-
                       var subDiv = document.createElement("div");
                       var subColumn1 = document.createElement("div");
                       var subColumn2 = document.createElement("div");
@@ -378,7 +384,7 @@
                         
                         subColumn3.innerHTML = subComponent[q].substring(0,20);
                         var subafter = document.createElement("div");
-                        subDiv.addEventListener("click", miniAccordian(subDiv, after, subDiv.firstChild.nextElementSibling.nextElementSibling));
+                        subDiv.addEventListener("click", miniAccordian(subDiv, subafter, subDiv.firstChild.nextElementSibling.nextElementSibling));
                         subafter.setAttribute("id","plusminus")
                         subafter.setAttribute("class","col-xs-1");
                         subafter.style.float = 'right';
@@ -397,7 +403,7 @@
                       if (subsubComponent.length > 1) {
                         var subsubCont = document.createElement("div");
                         subsubCont.setAttribute("id", (x+1).toString() + segment.substring(0, 3) + "subsubDynamicRow" + "." + uniqueSeperator.toString() + q.toString() + "." + multMessageLoop.toString());
-                        subsubCont.setAttribute("class", "subContainer");
+                        subsubCont.setAttribute("class", "subContainer repeating"+x.toString()+"."+segment.substring(0, 3)+"."+uniqueSeperator.toString() + "." + multMessageLoop.toString() + "." + r.toString() + "." + q.toString());
                         subCont.appendChild(subsubCont);
                         var subsubComponentLength = subsubComponent.length;
                         for (var s = 0; s < subsubComponentLength; s++) {
@@ -445,7 +451,7 @@
               }
               var findSegInfo = detailLookup.indexOf(segment.substring(0, 3));
               if(findSegInfo == -1){
-                findSegInfo = 76;
+                findSegInfo = 77;
               }
               if (segment.substring(0, 3) == "MSH") {
                 column1.innerHTML = segment.substring(0, 3) + "." + (x+1).toString();
@@ -460,6 +466,7 @@
                 column3.innerHTML = SegArray[x].substring(0,35);
                 var after = document.createElement("div");
                 div.addEventListener("click", miniAccordian(div, after, div.firstChild.nextElementSibling.nextElementSibling));
+                div.setAttribute("class","row miniAccordianOff");
                 //messageButton.onclick += "; miniAccordian(div, after, div.firstChild.nextElementSibling.nextElementSibling)";
                 after.setAttribute("id","plusminus")
                 after.setAttribute("class","col-xs-1");
