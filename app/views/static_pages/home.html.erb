@@ -617,7 +617,7 @@
               splitIndexCounter++;
             }
             else {
-              fullmessage = fullmessage.slice(0,splitIndex)+ "\n" + fullmessage.slice(splitIndex);
+              fullmessage = fullmessage.slice(0,splitIndex)+ "\n" + fullmessage.slice(splitIndex+1);
               enteredText = fullmessage.substring(splitIndex+3);
               splitIndexCounter++;
             }
