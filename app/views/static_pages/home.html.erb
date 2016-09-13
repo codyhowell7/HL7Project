@@ -599,7 +599,7 @@
       var enteredText = fullmessage;
       var detailLookupLength = detailLookup.length;
       for (var k = 0; k < detailLookupLength; k++) {
-        var re = new RegExp("(" + detailLookup[k].toString() + "\\|)");
+        var re = new RegExp("( " + detailLookup[k].toString() + "\\|)");
         var splitIndex;
         var splitIndexCounter=0;
         var prevSplitIndex=0;
