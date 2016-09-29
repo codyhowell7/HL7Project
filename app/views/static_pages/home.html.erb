@@ -29,16 +29,20 @@
   titleCreate.appendChild(titleTextCreate);
   var formGroupCreate = document.createElement("div");
   formGroupCreate.setAttribute("class","form-group");
+  formGroupCreate.setAttribute("id","textbox");
   mainContCreate.appendChild(formGroupCreate);
   var hl7TextfieldCreate = document.createElement("textarea");
   hl7TextfieldCreate.setAttribute("class","form-control");
   hl7TextfieldCreate.setAttribute("rows","5");
   hl7TextfieldCreate.setAttribute("id","HL7");
+  var rightSidespaceCreate = document.createElement("div");
+  rightSidespaceCreate.setAttribute("class", "rightSidespace");
+  rightSidespaceCreate.setAttribute("id", "RightSideSpace");
+  initialJS.appendChild(rightSidespaceCreate);
   formGroupCreate.appendChild(hl7TextfieldCreate);
   document.getElementsByTagName('body')[0].appendChild(initialJS);
 </script>
   <body>
-
     <div id="buttonspace" class="container">
       <a href="javascript:parse()" id="show_whatever" class="btn btn-primary btn-lg pretty">Parse</a>
       <a href="javascript:searchMessages()" id="searchButton" class="btn btn-primary btn-lg pretty">Search</a>
@@ -49,8 +53,7 @@
       <a href="javascript:compareMessages()" id="compareButton" class="btn btn-primary btn-lg pretty" style="margin-left: 10px">Compare</a>
       <input type="checkbox" id="UniqueValues" name="uniqueBox">Only show unique values</input>
       <p id="pageBreak"></p>
-      <div id="trythis"></div>
-     
+      <div id="trythis"></di>
   </body>
   </div>
 </div>
@@ -158,7 +161,7 @@
       while (document.getElementById("leftRightSidespace").firstChild) {
         document.getElementById("leftRightSidespace").removeChild(document.getElementById("leftRightSidespace").firstChild);
       }
-      enteredText = document.getElementById("HL7").value;
+      var enteredText = document.getElementById("HL7").value;
       var fullmessage = enteredText;
 
       enteredText = fullmessage;
@@ -169,7 +172,7 @@
       var indexCounter = 0;
       while ((indIndex = multiMessageText.search(/(MSH)/g)) != -1) {
         if (indexCounter > 0) {
-          adjustedIndex = indIndex + 3 + numMessage[indexCounter - 1];
+          var adjustedIndex = indIndex + 3 + numMessage[indexCounter - 1];
           numMessage.push(adjustedIndex);
           indexCounter++;
         }
@@ -203,7 +206,7 @@
         }else{
           document.getElementById("message" + multMessageLoop.toString()).innerHTML = "Message " + (multMessageLoop + 1).toString();
         }
-        numberOfLineBreaks = (enteredText.match(/\n/g)||[]).length;
+        var numberOfLineBreaks = (enteredText.match(/\n/g)||[]).length;
         var nextSeg = enteredText;
         fullmessage = enteredText;
         var uniqueSeperator = 1;
@@ -260,6 +263,7 @@
           }else{
             accordionCreate.innerHTML = sectionHead;
           }
+          accordionCreate.setAttribute("value", sectionHead);
           var panelCreate = document.createElement("div");
           panelCreate.setAttribute("class", "panel");
           panelCreate.setAttribute("id", (i.toString() + "text" + multMessageLoop.toString()));
@@ -512,6 +516,7 @@
           }else{
             this.innerHTML = this.value;
           }
+          document.getElementById("RightSideSpace").style.marginTop = "-" + (document.getElementById("centerCont").offsetHeight).toString() + "px";
         }
       }
     }
@@ -657,8 +662,10 @@
           onScreen[i].nextElementSibling.className = "panel";
           getColor = onScreen[i].style.backgroundColor;
           onScreen[i].style = "display: none; background-color: " + getColor.toString();
-        }else if (onScreen[i].tagName == "DIV"){
+        }else if (onScreen[i].tagName == "DIV" && onScreen[i].id != "RightSideSpace"){
           onScreen[i].parentElement.removeChild(onScreen[i]);
+        }else if (onScreen[i].tagName == "DIV" && onScreen[i].id == "RightSideSpace"){
+          document.getElementById("RightSideSpace").style.display = "none";
         }
       }
       if(document.getElementById("clipboardButton") != null){
@@ -671,17 +678,193 @@
       var y = 1;
       var findId = id.substring(id.lastIndexOf("e")+1, id.length);
       while (document.getElementById(y.toString() + "." + findId.toString()) != null) {
-        getColor = document.getElementById(y.toString() + "." + findId.toString()).style.backgroundColor;
+        var getColor = document.getElementById(y.toString() + "." + findId.toString()).style.backgroundColor;
         document.getElementById(y.toString() + "." + findId.toString()).setAttribute("class", "accordion");
         document.getElementById(y.toString() + "." + findId.toString()).setAttribute("style", "display: block; background-color: " +getColor.toString());
         y++;
       }
       document.getElementById("HL7").value = formatedMessage[findId];
-      populateSidebar();
+      if(window.innerWidth > 1900){
+        populateSidebar(findId);
+      }
     }
     
-    function populateSidebar(){
-      
+    function populateSidebar(messageID){
+      var messageType = document.getElementById("MSHcol3row9.1." + messageID.toString()).innerHTML;
+      switch(messageType){
+        case('DFT^P03'):
+          createRightSide();
+          document.getElementById("sidebarTitle").innerHTML = "DFT" + "   -   " + pullInfo(messageID, "Sender");
+          document.getElementById("sidebarRow1").innerHTML = "Patient Name:    " +pullInfo(messageID, "PatName") ;
+          document.getElementById("sidebarRow2").innerHTML = "Patient ID:    " + (pullInfo(messageID, "PID") || pullInfo(messageID, "MRN"));
+          document.getElementById("sidebarRow3").innerHTML = "Location:    " + (pullInfo(messageID, "Facility") || pullInfo(messageID, "FacilityOnco"));
+          document.getElementById("sidebarRow8").innerHTML = "ID:    "+ pullInfo(messageID, "FacilityID");
+          document.getElementById("sidebarRow4").innerHTML = "Attending Provider:    " + pullInfo(messageID, "AtnProvName");
+          document.getElementById("sidebarRow5").innerHTML = "ID:    " +pullInfo(messageID, "AtnProv");
+          document.getElementById("sidebarRow6").innerHTML = "Referring Provider:    " + pullInfo(messageID, "RefProvName");
+          document.getElementById("sidebarRow7").innerHTML = "ID:    " + pullInfo(messageID, "RefProv");
+          document.getElementById("sidebarRow9").innerHTML = "CPT Codes:    " + pullInfo(messageID, "CPT");
+          document.getElementById("sidebarRow10").innerHTML = "Diagnosis Codes:    " + pullInfo(messageID, "Dx");
+          document.getElementById("sidebarRow11").innerHTML = "Date of Service:    " + pullInfo(messageID, "DOS");
+      }
+    }
+    
+    function pullInfo(messageID, field){
+    var listofsegments = document.querySelectorAll('*[class="col-xs-2"]');
+      switch(field){
+        case('PID'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PID.2" && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var test = listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length);
+              var test2 = messageID;
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('MRN'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PID.3"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('PatName'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PID.5.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var Last = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+            if(listofsegments[x].innerHTML == "PID.5.2"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var First = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+          return First +" "+ Last;
+        case('FacilityOnco'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PV1.3.4"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('Facility'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "FT1.16.2"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('FacilityID'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "FT1.16.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('AtnProvName'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "FT1.20.2"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var Last = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+            if(listofsegments[x].innerHTML == "FT1.20.3"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var First = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+          return First +" "+ Last;
+        case('AtnProv'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "FT1.20.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('RefProv'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PV1.8.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('RefProvName'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PV1.8.2"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var Last = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+            if(listofsegments[x].innerHTML == "PV1.8.3"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var First = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+          return First +" "+ Last;
+        case('CPT'):
+        var CodeList = "";
+          for(var x=0; x<listofsegments.length; x++){
+            if((listofsegments[x].innerHTML == "FT1.25.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) < 1){
+              CodeList += listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+            else if((listofsegments[x].innerHTML == "FT1.25.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) > 1){
+              CodeList += ", " + listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+          if(CodeList.length == 0){
+            for(var x=0; x<listofsegments.length; x++){
+              if((listofsegments[x].innerHTML == "FT1.25"  &&listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) < 1){
+                CodeList += listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+              else if((listofsegments[x].innerHTML == "FT1.25"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) > 1){
+                CodeList += ", " + listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+            }
+          }
+          return CodeList;
+          case('Dx'):
+          var CodeList = "";
+          var dup;
+            for(var x=0; x<listofsegments.length; x++){
+              if((listofsegments[x].innerHTML == "FT1.19.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) < 1){
+                CodeList += listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+              else if((listofsegments[x].innerHTML == "FT1.19.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) > 1){
+                var CodeListArray = CodeList.split(",")
+                for(var i=0; i<CodeListArray.length; i++){
+                  if(listofsegments[x].nextElementSibling.nextElementSibling.innerHTML == CodeListArray[i]){
+                    dup = 1;
+                    break;
+                  }
+                }
+                  if(dup == 1){
+                    dup = 0;
+                    continue;
+                  }
+                CodeList += ", " + listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+            }
+            if(CodeList.length == 0){
+              for(var x=0; x<listofsegments.length; x++){
+                if((listofsegments[x].innerHTML == "FT1.19"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) < 1){
+                  CodeList += listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+                }
+                else if((listofsegments[x].innerHTML == "FT1.19"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) > 1){
+                  var CodeListArray = CodeList.split(",")
+                  for(var i=0; i<CodeListArray.length; i++){
+                    if(listofsegments[x].nextElementSibling.nextElementSibling.innerHTML == CodeListArray[i]){
+                      dup = 1;
+                      break;
+                    }
+                  }
+                    if(dup == 1){
+                      dup=0;
+                      continue;
+                    }
+                  CodeList += ", " + listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+                }
+              }
+            }
+          return CodeList;
+          case('DOS'):
+            for(var x=0; x<listofsegments.length; x++){
+              if(listofsegments[x].innerHTML == "FT1.4"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var DOS = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML
+                return DOS.substring(4,6) + "/" + DOS.substring(6,8) + "/" + DOS.substring(0,4);
+              }
+            }
+          case('Sender'):
+            for(var x=0; x<listofsegments.length; x++){
+              if(listofsegments[x].innerHTML == "MSH.3"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+                return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+            }
+      }
     }
 
     function searchMessages() {
@@ -759,7 +942,7 @@
         var showCompare;
         var uniqueList= [];
         var counter = 1;
-        fieldNameListLength = fieldNameList.length;
+        var fieldNameListLength = fieldNameList.length;
         for(var i=0; i<fieldNameListLength; i++){
           if(compareText == fieldNameList[i].innerHTML){
             showCompare = fieldNameList[i].parentElement.cloneNode(true);
@@ -828,13 +1011,78 @@
       for(var x=0; x<elementsToCopyLength; x++){
         clipboardCopy += elementsToCopy[x].firstChild.firstChild.nextElementSibling.nextElementSibling.innerHTML.toString() + "\n";
       }
-      hiddenCopy = document.createElement("textarea");
+      var hiddenCopy = document.createElement("textarea");
       hiddenCopy.setAttribute("id","hiddenCopy");
       hiddenCopy.value = clipboardCopy;
       document.getElementById("trythis").appendChild(hiddenCopy);
       hiddenCopy.select();
       document.execCommand('copy');
       hiddenCopy.parentElement.removeChild(document.getElementById("hiddenCopy"));
+    }
+    
+    function createRightSide(){
+      var sidebarTitle = document.createElement("DIV");
+      sidebarTitle.setAttribute("id","sidebarTitle");
+      sidebarTitle.style.display = "block";
+      var sidebarRow1 = document.createElement("DIV");
+      sidebarRow1.setAttribute("id","sidebarRow1");
+      sidebarRow1.setAttribute("class","InfoHeader2");
+      sidebarRow1.style.display = "block";
+      var sidebarRow2 = document.createElement("DIV");
+      sidebarRow2.setAttribute("id","sidebarRow2");
+      sidebarRow2.setAttribute("class","InfoHeader");
+      sidebarRow2.style.display = "block";
+      var sidebarRow3 = document.createElement("DIV");
+      sidebarRow3.setAttribute("id","sidebarRow3");
+      sidebarRow3.setAttribute("class","InfoHeader2");
+      sidebarRow3.style.display = "block";
+      var sidebarRow4 = document.createElement("DIV");
+      sidebarRow4.setAttribute("id","sidebarRow4");
+      sidebarRow4.setAttribute("class","InfoHeader2");
+      sidebarRow4.style.display = "block";
+      var sidebarRow5 = document.createElement("DIV");
+      sidebarRow5.setAttribute("id","sidebarRow5");
+      sidebarRow5.setAttribute("class","InfoHeader");
+      sidebarRow5.style.display = "block";
+      var sidebarRow6 = document.createElement("DIV");
+      sidebarRow6.setAttribute("id","sidebarRow6");
+      sidebarRow6.setAttribute("class","InfoHeader2");
+      sidebarRow6.style.display = "block";
+      var sidebarRow7 = document.createElement("DIV");
+      sidebarRow7.setAttribute("id","sidebarRow7");
+      sidebarRow7.setAttribute("class","InfoHeader");
+      sidebarRow7.style.display = "block";
+      var sidebarRow8 = document.createElement("DIV");
+      sidebarRow8.setAttribute("id","sidebarRow8");
+      sidebarRow8.setAttribute("class","InfoHeader");
+      sidebarRow8.style.display = "block";
+      var sidebarRow9 = document.createElement("DIV");
+      sidebarRow9.setAttribute("id","sidebarRow9");
+      sidebarRow9.setAttribute("class","InfoHeader");
+      sidebarRow9.style.display = "block";
+      var sidebarRow10 = document.createElement("DIV");
+      sidebarRow10.setAttribute("id","sidebarRow10");
+      sidebarRow10.setAttribute("class","InfoHeader");
+      sidebarRow10.style.display = "block";
+      var sidebarRow11 = document.createElement("DIV");
+      sidebarRow11.setAttribute("id","sidebarRow11");
+      sidebarRow11.setAttribute("class","InfoHeader");
+      sidebarRow11.style.display = "block";
+      var sidebar = document.getElementById("RightSideSpace");
+      sidebar.appendChild(sidebarTitle);
+      sidebar.appendChild(sidebarRow1);
+      sidebar.appendChild(sidebarRow2);
+      sidebar.appendChild(sidebarRow3);
+      sidebar.appendChild(sidebarRow8);
+      sidebar.appendChild(sidebarRow4);
+      sidebar.appendChild(sidebarRow5);
+      sidebar.appendChild(sidebarRow6);
+      sidebar.appendChild(sidebarRow7);
+      sidebar.appendChild(sidebarRow9);
+      sidebar.appendChild(sidebarRow10);
+      sidebar.appendChild(sidebarRow11);
+      sidebar.style.display = "block";
+      sidebar.style.marginTop = "-" + (document.getElementById("centerCont").offsetHeight).toString() + "px";      
     }
 
     var EPPZScrollTo = {
