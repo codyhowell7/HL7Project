@@ -46,7 +46,8 @@ h2 {
   margin-bottom: 30px;
   text-align: center;
   font-weight: normal;
-  color: #777;
+  background-color: #f7f7f7;
+  height: 30px;
 }
 
 p {
@@ -356,7 +357,7 @@ div.rightSidespace{
     border: none;
     outline: none;
     width: 16%;
-    height: 50%;
+    height: 55%;
     margin-right: 33px;
     margin-left: auto;
     float: right;
@@ -368,7 +369,7 @@ div.rightSidespace{
 #sidebarTitle{
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 100%;
   text-align: center;
   font-size: 20px;
   padding-bottom: 10px;
@@ -383,4 +384,10 @@ div.InfoHeader2{
   font-size: 16px;
   padding-left: 10px;
   padding-bottom: 0px;
+}
+#Header{
+  background-color: #f7f7f7;
+  height: 45px;
+  margin-bottom: 30px;
+  margin-top: -30px;
 }

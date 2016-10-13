@@ -196,7 +196,7 @@
         messageButton.setAttribute("class", "btn btn-primary btn-lg pretty");
         messageButton.setAttribute("onclick", "showMessage(this.id)");
         messageButton.setAttribute("style", "border-bottom-style: solid; border-color: white; margin-top: 5px; border-width: 3px");
-        if(multMessageLoop > 19 && window.innerWidth>1000){
+        if(multMessageLoop > messageLength/2 && window.innerWidth>1000){
           document.getElementById("leftRightSidespace").appendChild(messageButton);
         }else{
           document.getElementById("leftsidespace").appendChild(messageButton);
@@ -557,6 +557,7 @@
             }     
           }
         }
+        document.getElementById("RightSideSpace").style.marginTop = "-" + (document.getElementById("centerCont").offsetHeight).toString() + "px";
       };
     };
     
@@ -623,7 +624,7 @@
             break;
           }else{
             if (splitIndexCounter > 0) {
-              fullmessage = fullmessage.slice(0,prevSplitIndex)+fullmessage.slice(prevSplitIndex, splitIndex+prevSplitIndex)+"\n"+fullmessage.slice(splitIndex+prevSplitIndex);
+              fullmessage = fullmessage.slice(0,prevSplitIndex)+fullmessage.slice(prevSplitIndex, splitIndex+prevSplitIndex)+"\n"+fullmessage.slice(splitIndex+1+prevSplitIndex);
               enteredText = enteredText.substring(splitIndex+3);
               splitIndex++;
               splitIndexCounter++;
@@ -694,18 +695,35 @@
       switch(messageType){
         case('DFT^P03'):
           createRightSide();
-          document.getElementById("sidebarTitle").innerHTML = "DFT" + "   -   " + pullInfo(messageID, "Sender");
-          document.getElementById("sidebarRow1").innerHTML = "Patient Name:    " +pullInfo(messageID, "PatName") ;
-          document.getElementById("sidebarRow2").innerHTML = "Patient ID:    " + (pullInfo(messageID, "PID") || pullInfo(messageID, "MRN"));
-          document.getElementById("sidebarRow3").innerHTML = "Location:    " + (pullInfo(messageID, "Facility") || pullInfo(messageID, "FacilityOnco"));
-          document.getElementById("sidebarRow8").innerHTML = "ID:    "+ pullInfo(messageID, "FacilityID");
-          document.getElementById("sidebarRow4").innerHTML = "Attending Provider:    " + pullInfo(messageID, "AtnProvName");
-          document.getElementById("sidebarRow5").innerHTML = "ID:    " +pullInfo(messageID, "AtnProv");
-          document.getElementById("sidebarRow6").innerHTML = "Referring Provider:    " + pullInfo(messageID, "RefProvName");
-          document.getElementById("sidebarRow7").innerHTML = "ID:    " + pullInfo(messageID, "RefProv");
-          document.getElementById("sidebarRow9").innerHTML = "CPT Codes:    " + pullInfo(messageID, "CPT");
-          document.getElementById("sidebarRow10").innerHTML = "Diagnosis Codes:    " + pullInfo(messageID, "Dx");
-          document.getElementById("sidebarRow11").innerHTML = "Date of Service:    " + pullInfo(messageID, "DOS");
+          document.getElementById("sidebarTitle").innerHTML = "<b>DFT" + "   -   " + pullInfo(messageID, "Sender") + "</b>";
+          document.getElementById("sidebarRow1").innerHTML = "<b>Patient Name:</b>    " +pullInfo(messageID, "PatName") ;
+          document.getElementById("sidebarRow2").innerHTML = "<b>Patient ID:</b>    " + (pullInfo(messageID, "PID") || pullInfo(messageID, "MRN"));
+          document.getElementById("sidebarRow3").innerHTML = "<b>Location:</b>    " + (pullInfo(messageID, "Facility") || pullInfo(messageID, "FacilityOnco"));
+          document.getElementById("sidebarRow8").innerHTML = "<b>ID:</b>    "+ (pullInfo(messageID, "FacilityID") || pullInfo(messageID, "FacilityIDOnco")) ;
+          document.getElementById("sidebarRow4").innerHTML = "<b>Attending Provider:</b>    " + pullInfo(messageID, "AtnProvNameDFT");
+          document.getElementById("sidebarRow5").innerHTML = "<b>ID:</b>    " +pullInfo(messageID, "AtnProvDFT");
+          document.getElementById("sidebarRow6").innerHTML = "<b>Referring Provider:</b>    " + pullInfo(messageID, "RefProvName");
+          document.getElementById("sidebarRow7").innerHTML = "<b>ID:</b>    " + pullInfo(messageID, "RefProv");
+          document.getElementById("sidebarRow9").innerHTML = "<b>CPT Codes:</b>    " + (pullInfo(messageID, "CPT") || pullInfo(messageID, "CPT2"));
+          document.getElementById("sidebarRow10").innerHTML = "<b>Diagnosis Codes:</b>    " + pullInfo(messageID, "Dx");
+          document.getElementById("sidebarRow11").innerHTML = "<b>Date of Service:</b>    " + pullInfo(messageID, "DOS");
+          break;
+        case('ADT^A08'):
+          createRightSide();
+          document.getElementById("sidebarTitle").innerHTML = "<b>ADT" + "   -   " + pullInfo(messageID, "Sender") + "</b>";
+          document.getElementById("sidebarRow1").innerHTML = "<b>Patient Name:</b>    " +pullInfo(messageID, "PatName") ;
+          document.getElementById("sidebarRow2").innerHTML = "<b>Patient ID:</b>    " + (pullInfo(messageID, "PID") || pullInfo(messageID, "MRN"));
+          document.getElementById("sidebarRow3").innerHTML = "<b>Location: </b>   " + pullInfo(messageID, "FacilityOnco");
+          document.getElementById("sidebarRow8").innerHTML = "<b>ID:</b>    "+ pullInfo(messageID, "FacilityIDOnco");
+          document.getElementById("sidebarRow4").innerHTML = "<b>Attending Provider:</b>    " + pullInfo(messageID, "AtnProvNameADT");
+          document.getElementById("sidebarRow5").innerHTML = "<b>ID:</b>    " +pullInfo(messageID, "AtnProvADT");
+          document.getElementById("sidebarRow6").innerHTML = "<b>Referring Provider:</b>    " + pullInfo(messageID, "RefProvName");
+          document.getElementById("sidebarRow7").innerHTML = "<b>ID:</b>    " + pullInfo(messageID, "RefProv");
+          document.getElementById("sidebarRow9").innerHTML = "<b>Primary Insurance:</b>    " + pullInfo(messageID, "Ins");
+          document.getElementById("sidebarRow9").setAttribute("class","InfoHeader2");
+          document.getElementById("sidebarRow10").innerHTML = "<b>ID:</b>    " + pullInfo(messageID, "InsID");
+          break;
+          
       }
     }
     
@@ -738,7 +756,7 @@
           return First +" "+ Last;
         case('FacilityOnco'):
           for(var x=0; x<listofsegments.length; x++){
-            if(listofsegments[x].innerHTML == "PV1.3.4"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+            if(listofsegments[x].innerHTML == "PV1.3.9"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
               return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
             }
           }
@@ -754,7 +772,13 @@
               return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
             }
           }
-        case('AtnProvName'):
+        case('FacilityIDOnco'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PV1.3.4"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('AtnProvNameDFT'):
           for(var x=0; x<listofsegments.length; x++){
             if(listofsegments[x].innerHTML == "FT1.20.2"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
               var Last = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
@@ -764,9 +788,25 @@
             }
           }
           return First +" "+ Last;
-        case('AtnProv'):
+        case('AtnProvDFT'):
           for(var x=0; x<listofsegments.length; x++){
             if(listofsegments[x].innerHTML == "FT1.20.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+        case('AtnProvNameADT'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PV1.7.2"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var Last = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+            if(listofsegments[x].innerHTML == "PV1.7.3"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              var First = listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+          return First +" "+ Last;
+        case('AtnProvADT'):
+          for(var x=0; x<listofsegments.length; x++){
+            if(listofsegments[x].innerHTML == "PV1.7.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
               return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
             }
           }
@@ -807,6 +847,27 @@
             }
           }
           return CodeList;
+        case('CPT2'):
+        var CodeList = "";
+          for(var x=0; x<listofsegments.length; x++){
+            if((listofsegments[x].innerHTML == "FT1.7.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) < 1){
+              CodeList += listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+            else if((listofsegments[x].innerHTML == "FT1.7.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) > 1){
+              CodeList += ", " + listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+            }
+          }
+          if(CodeList.length == 0){
+            for(var x=0; x<listofsegments.length; x++){
+              if((listofsegments[x].innerHTML == "FT1.7"  &&listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) < 1){
+                CodeList += listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+              else if((listofsegments[x].innerHTML == "FT1.7"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) > 1){
+                CodeList += ", " + listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+            }
+          }
+          return CodeList;
           case('Dx'):
           var CodeList = "";
           var dup;
@@ -831,13 +892,16 @@
             }
             if(CodeList.length == 0){
               for(var x=0; x<listofsegments.length; x++){
-                if((listofsegments[x].innerHTML == "FT1.19"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) < 1){
+                var Dxcounter = 0;
+                if(listofsegments[x].innerHTML.substring(0,6) == "FT1.19"){
+                for(Dxcounter; Dxcounter<8;Dxcounter++ ){
+                if((listofsegments[x].innerHTML == "FT1.19[" + Dxcounter + "].1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) < 1){
                   CodeList += listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
                 }
-                else if((listofsegments[x].innerHTML == "FT1.19"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) > 1){
+                else if((listofsegments[x].innerHTML == "FT1.19[" + Dxcounter + "].1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID)  && (CodeList.length) > 1){
                   var CodeListArray = CodeList.split(",")
                   for(var i=0; i<CodeListArray.length; i++){
-                    if(listofsegments[x].nextElementSibling.nextElementSibling.innerHTML == CodeListArray[i]){
+                    if(listofsegments[x].nextElementSibling.nextElementSibling.innerText == CodeListArray[i].trim()){
                       dup = 1;
                       break;
                     }
@@ -847,6 +911,8 @@
                       continue;
                     }
                   CodeList += ", " + listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+                }
+                }
                 }
               }
             }
@@ -860,7 +926,24 @@
             }
           case('Sender'):
             for(var x=0; x<listofsegments.length; x++){
-              if(listofsegments[x].innerHTML == "MSH.3"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+              if(listofsegments[x].innerHTML == "MSH.3"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID && listofsegments[x].nextElementSibling.nextElementSibling.innerHTML.split("^").length < 2){
+                return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+            }
+            for(var x=0; x<listofsegments.length; x++){
+              if(listofsegments[x].innerHTML == "MSH.3.1"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+                return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+            }
+          case('Ins'):
+            for(var x=0; x<listofsegments.length; x++){
+              if(listofsegments[x].innerHTML == "IN1.4"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
+                return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
+              }
+            }
+          case('InsID'):
+            for(var x=0; x<listofsegments.length; x++){
+              if(listofsegments[x].innerHTML == "IN1.3"  && listofsegments[x].id.substring(listofsegments[x].id.lastIndexOf(".")+1,listofsegments[x].id.length)==messageID ){
                 return listofsegments[x].nextElementSibling.nextElementSibling.innerHTML;
               }
             }
